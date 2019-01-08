@@ -1,14 +1,249 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+% !TeX spellcheck = en_GB
+\documentclass[a4paper,doc,floatsintext,natbib,10pt]{apa6}
+\title{Flow experiences during visuomotor skill acquisition reflect deviation from a power-law learning curve, but not overall level of skill}
+\shorttitle{Flow Experience and the Power Law of Practice}
+% Global learning, local Flow: subjective Flow report responds to proximal performance reference-level in a longitudinally-measured game-like task}
+% Go with the Flow: Flow-experience and Performance in learning a High-Speed Steering Task
+% Effect of Practice and Performance on Self-Reported Flow in a High-Speed Driving Game
+% Self-Reported Flow Depends on Balance of Demand and Skill, not Absolute Performance Level
+% Performance and Flow in High-Speed Steering: Flow Depends on Deviations from a Power-law Learning Curve
+% Performance and Flow in High-Speed Steering: Self-reported Flow Reflects Deviations from a Power-law Learning Curve
+% Experiencing Flow during high-speed steering reflects deviation from a power-law learning curve, but not overall level of skill
+% Experiencing Flow during high-speed steering reflects deviation from a power-law learning curve, but is insensitive to skill level
 
-\title{Flowcar sEBR}
-\author{Benjamin Cowley}
-\date{January 2019}
+% FIXME - data and analysis code in a repository
+
+% insert here the call for the packages your document requires
+\graphicspath{{./Figures/}}
+% \usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{xspace}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{varwidth}
+\usepackage{todonotes}
+\usepackage{caption}
+\usepackage[normalem]{ulem}
+\usepackage[auth-lg]{authblk}
+\usepackage{xcolor}
+\usepackage{varwidth}
+
+\newcommand{\hl}{\textcolor{red!80}}
+\newcommand{\CCS}{\textsf{CogCarSim}\xspace}
+\newcommand{\nicewidth}{0.75\textwidth}
+\newcommand{\tapprx}{\raisebox{0.4ex}{\texttildelow}}
+
+\author[1,2$\alpha$ *]{Benjamin Ultan Cowley}
+\author[1,5$\alpha$]{Jussi Palom\"{a}ki}
+\author[1,3$\alpha$]{Tuisku Tammi}
+\author[1,3$\beta$]{Roosa Frantsi}
+\author[1,4$\beta$]{Ville-Pekka Inkil\"{a}}
+\author[1$\beta$]{Noora Lehtonen}
+\author[1$\beta$]{Pasi P\"{o}l\"{o}nen}
+\author[1$\beta$]{Juha Veps\"{a}l\"{a}inen}
+\author[1,3,5]{Otto Lappi}
+
+\affil[1]{Cognitive Science, Department of Digital Humanities, University of Helsinki, Helsinki, Finland}
+\affil[2]{Cognitive Brain Research Unit, Department of Psychology and Logopedics, University of Helsinki, Helsinki, Finland}
+\affil[3]{TRUlab, University of Helsinki, Helsinki, Finland}
+\affil[4]{Digitalization, Finnish Institute of Occupational Health, Helsinki, Finland}
+\affil[5]{Helsinki Centre for Digital Humanities (HELDIG)}
+
+\affil[$\alpha$]{\it The first three authors contributed equally to this work}
+\affil[$\beta$]{\it These authors contributed equally to this work}
+
+\affiliation{* ben.cowley@helsinki.fi}
+
+\abstract{Flow is a state of `optimal experience' that arises when skill and task demands match. Flow has been well studied in psychology using a range of self-report and experimental methods; with most research typically focusing on how Flow is elicited by a particular task. Here, we focus on how the experience of Flow changes during task skill development. We present a longitudinal experimental study of learning, wherein participants (N = 9) play a novel steering-game task designed to elicit Flow by matching skill and demand, and providing clear goals and feedback. Experimental design involves extensive in-depth measurement of behaviour, physiology, and Flow self-reports over two weeks of 40 game trials in eight sessions. Behavioural results are both strikingly similar and strong within each participant. We find that the game induces a near-constant state of elevated Flow. We further find that the variation in Flow across all trials is less affected by overall performance improvement than by deviation of performance from the expected value predicted by a power law model of learning. Finally, concurrent measurement of physiology shows that spontaneous blink rate, a putative index of striatal dopamine, relates to the individual rate of learning, and that this relationship is moderated by Flow.\\
+
+\textbf{Keywords:} Flow, Skill Acquisition, Power law of practice, Visuomotor performance, Steering, high performance cognition
 
 \begin{document}
-
 \maketitle
 
-\section{Introduction}
+
+\section*{Introduction}
+
+In many fields of human endeavour - such as music, art and sports - the skilful performance of a demanding task can elicit a state of `optimal experience' called Flow \citep{Csikszentmihalyi1975}. The conditions for Flow are: {\sf C1} challenges match skill in a demanding task; {\sf C2} clear and personally significant goals; and {\sf C3} unambiguous feedback on goal achievement. When these conditions are met, an individual may enter a mode of high performance characterized by several self-reported features: {\sf F1} total focus in the present moment, and concentration on what one is doing; {\sf F2} merging of action and awareness (being `one' with the task); {\sf F3} loss of reflective self-consciousness or a sense of effortlessness and automaticity; {\sf F4} a sense of personal control and confidence in one's skill; {\sf F5} positive affect, or an experience of the activity as highly enjoyable and intrinsically rewarding; {\sf F6} a distortion of temporal experience (time may seem to go slower or faster than normal) \citep{Nakamura2002,Engeser2012intro,Keller2012}. Flow has an autotelic quality, i.e. people want to do Flow-producing activities for their own sake regardless of external reward.
+
+The antecedent conditions ({\sf C1-3}) and phenomenological features ({\sf F1-6}) of Flow have been investigated for several decades, mainly using analysis of self-report data from participants engaging in natural everyday or expert performance \citep{Csikszentmihalyi1971,Moneta2012}. Despite this, debate continues around the precise definition of conditions, especially {\sf C1}. There are multiple models of Flow which have different interpretations of the skill-challenge balance required for Flow, from which different predictions can be derived for how Flow should change when skill and challenge themselves change during learning. The original channel model \citep{Csikszentmihalyi1975} assumed levels of challenge and skill can vary independently from low to high, and assumed Flow can be induced when skill and challenge match at any level, giving the Flow `channel'.
+
+The now-classic octant/quadrant models \citep{Massimini1988} instead suggested Flow only happens above a threshold level of skill and challenge. Too-low perceived task demand would not elicit Flow, even when matching skill. This model has been criticized on the grounds that it remains unclear how the reference level is determined: does challenge need to exceed the challenge of most typical everyday tasks? Does the task need to be particularly challenging for the individual, challenging relative to typical skills of a reference population, or in comparison to some absolute level of physical effort or information processing complexity? Or is challenge task-specific? In which case, what happens during task learning? Does the reference level need to be recalibrated to suit (presumably) increased levels of skill and challenge? For further discussion and critical examination of these models see \cite{Moneta2012,Keller2012}.
+
+Recently \citet[pp-56]{Keller2012} proposed the Flow intensity model, using perceived challenge--skill balance and subjective value of the task as dimensions of Flow-eliciting conditions. This model has no reference levels at all, thus handling the ambiguity of the reference level concept and also their argument that level might not be empirically determinable for researchers, or even psychologically available to performing individuals. But here, the direction of a challenge--skill imbalance has no effect: only the absolute magnitude counts.
+
+Thus, the state of the art is unclear on whether reference levels of challenge and/or skill govern the emergence of Flow. If they do, it is unclear whether the levels are defined relative to a given task or task episode (in which case should the level change with skill acquisition); or are they defined relative to other tasks (in which case, should the comparison of task demand be understood relative to the skill sets of the individual, a reference population, or an absolute standard). Also unclear is importance of direction in skill--challenge ratio, i.e. whether it makes a difference that skills exceed challenge or challenge exceed skill. Finally, these models capture a static snapshot of Flow, so Flow research must still deal with \textit{learning} that increases skill and the effects thereof on {\sf C1}, skill-challenge balance condition.
+
+%anticipate MAIN RESULT and its IMPLICATIONS here
+The matter is of importance because understanding how the Flow conditions behave across different levels of skill is relevant to any field interested in the development of performance (in e.g. development of coaching practices or concentration techniques in sport \citep{Jackson1996}). Also, an understanding of the specific mechanisms that mediate Flow and learning could be significant for enhancing enjoyment or performance in many tasks (e.g. through better design of recreational tasks such as games \citep{Chen2007}). However, these aims call for studies of Flow as elicited in different phases of learning, with a more controlled and quantitative approach; i.e. using approaches from experimental psychology \citep{Harris2017,Keller2008}, and psychophysiology \citep{Peifer2012,Peifer2014,Wolf2015,Harmat2015,Labonte-LeMoyne2016}.
+
+This paper reports an experimental skill-acquisition study on the connections between performance, psychophysiology and the self-reported phenomenology of Flow. We introduce a novel, demanding visuomotor task. With a longitudinal design, we are afforded more power to examine the connections of Flow and performance within- and between-subjects.
+
+To anticipate the findings, our task succeeds in eliciting an elevated level of Flow across all self-reports. Yet when we examine Flow with fine granularity, we see that variation in Flow responses relates less to overall performance improvement, than it does to deviation of performance from the expected value predicted by a power law model of learning, with higher performance associated with higher Flow and lower performance with lower Flow. These results show that: 1. Contrary to the \cite{Keller2012} model the direction of challenge-skill deviation cannot be ignored; 2. If a reference level is important (as the octant model requires), it is so on a trial-wise scale. I.e. the reference level is task-specific and is continually adjusted during skill acquisition, following in step with the individual's own learning curve.
+
+Our study highlights a need for models of Flow to be developed in a way that better captures Flow dynamics, over the range of skill acquisition from novice to expert, than the state-like models of the phenomenal psychology tradition \citep{Moneta2012}.
+
+\paragraph{Protocol and Research Questions}
+
+Participants learned to play a custom-made high-speed steering game (Fig.~\ref{fig:cogcarsim}, for game video see \url{https://doi.org/10.6084/m9.figshare.7269395.v1}). The game was specifically designed to elicit Flow through balancing task demand with the skill level of the participant, and providing clear immediate feedback. The aim in the game was to steer a blue cube through a course with randomly placed red obstacles at the highest possible speed. The cube started each game at a fixed forward velocity, which increased at a constant rate. The lateral position of the cube was controlled by the steering wheel. Collision with obstacles reduced speed by a fixed amount, also indicated by a flashing of the screen (see Methods for units).
+
+This design, inspired by psychophysical staircase methods \citep{Cornsweet1962}, ensured constant match between skill and demand at the participant's level of performance. The performance was measured by duration of the trial (shorter duration = faster average speed = better), displayed as a time score at the end of each trial.
+
+\begin{figure*}[!ht]
+	\centering
+	\includegraphics[width=\nicewidth]{Screenshot_cogcarsim}
+	\caption{The high-speed steering task. The participant steers the blue cube to avoid conical/spherical obstacles on the track, which is bounded to each side by dark blue parallel lines. The game was designed to continually adapt the difficulty level (speed) to the participant's skill (obstacle collisions). Such balance is considered one of the key antecedents of Flow.}
+	\label{fig:cogcarsim}
+\end{figure*}
+
+Participants played the game for forty trials across eight sessions, over a period of 2-3 weeks, which was sufficient to achieve good proficiency in this task with no ceiling effect. The 10 item Flow Short Scale \citep{Engeser2008} was filled after each trial to probe self-reported Flow in the task. Physiological data were recorded, during task and five minutes of baseline, in sessions one and five-to-eight.
+
+This design allowed us to explore the following Research Questions:
+\begin{enumerate}
+	\item RQ1. How does performance change over time, i.e. what is the shape of the `learning curve' (LC)? Specifically, does performance in the game improve, and does improvement follow a power law of practice (as found in much previous work on visuomotor skill acquisition \citep{Newell1982})?
+
+	\item RQ2. How is trial-wise self-reported Flow (from here on simply `Flow') related to performance? Specifically, is performance improvement across the whole experiment (i.e. learning) accompanied by higher levels of Flow?
+
+	\item RQ3. Are there identifiable physiological markers of Flow and/or physiological measures that are predictive of task performance? Specifically, given its putative association with striatal dopamine \citep{Slagter2012}, spontaneous eye blink rate (sEBR) was of interest in our reinforcement-based learning task (positive reinforcement from increase in speed, negative reinforcement from collisions). Other measures were collected as well, but will be analysed and reported elsewhere; here we focus on the sEBR results.
+
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%    METHODS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Methods}
+\input{sect_methods}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%    RESULTS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Results}
+\input{sect_results}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%     DISCUSSION    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Discussion}
+% exploration of Flow and on-task learning (LC as opposed to pre- post)
+We present a longitudinal experiment of Flow in a game-like high-speed steering task where task performance is easily parametrised and its relation to Flow and sEBR analysed. % game was fairly successful in eliciting Flow-like experiences (high baseline, score five out of seven)
+To induce Flow, the game was designed to hold the balance between skill and challenge constant: the difficulty of the game continually adapted to the skill level of the participant.
+
+%we do not see Flow increasing as you learn the game; it is not that when you play better you get more Flow
+The results show the game was clearly Flow-inducing: mean Flow across sessions was reported as 5.1 (out of 7) on the FSS. This relatively high and stable mean Flow `baseline' induced by the game could be construed as reflecting the meeting of skill and challenge {\sf C1--3} by design.
+
+We further found that Flow was not associated with gaining experience and skill in the game -- our participants did not reliably report more Flow even as they learned, session by session, to complete the trials faster. This supports the theoretical position that Flow is elicited by the balance of skill and challenge, but show that Flow is less sensitive to the absolute level (within a task) of skill or challenge. This fits with the models which are more lenient regarding skill/challenge level: the original Flow Channel model and the latest Flow intensity model. The Quadrat/Octant models, which require ``above-average'' skills and challenges for Flow, are only supported under the assumption that this above-average reference level is task-specific and dynamically adjusted in step with the learning curve. Otherwise, if the reference level is fixed, then based on the Octant model experience of Flow would be predicted to increase as the skill level (and demand) increased during our longitudinal measurements of participant learning. In other words, when skills and challenges increased from a fixed reference, participants should have felt further `north-east' of the model midpoint where Flow bottoms out, and thus be more likely to report Flow and assign it greater intensity on a reporting scale. This was not observed. Therefore, our results do not fit the predictions of the Quadrant/Octant models {\it under the assumption of a fixed-demand reference level}. See also \cite{Keller2012} for critical discussion of these models. In absence of an independent motivation for such adjustment hypothesis, it must be considered somewhat {\it ad hoc} and so we suggest that - in order to incorporate the present findings - the development of the octant model should be in the direction of providing more fundamental basis for deriving the assumptions regarding the reference level.
+
+\subsection*{Mechanisms of learning and Flow}
+% we are relating Flow to the learning mechanisms: the Flow reports across time are related via the LC (skill level)
+% we do see that when you play better than expected, you report more Flow (but caution: direction on causation between Flow and performance unclear - does Flow lead to better performance or does better performance lead to higher (post hoc) self-reported Flow?)
+We also showed that higher trial-wise Flow (trials with higher self-reported Flow) was associated with trial durations shorter than expected by the power law LC model. Thus, while mean Flow remained stably elevated across sessions, Flow for each trial was higher-than-average or lower-than-average in agreement with task performance that was better or worse than expected (at the current level of skill). In other words, learning to play the game did not itself increase Flow; rather, the game induced a fairly high level of mean Flow, and trial-wise variability of Flow was correlated with better or worse than statistically-expected performance.
+
+It is a novel observation that trial-wise Flow relates to fluctuations of performance around the level expected from the learning curve. It is interesting because higher-than-expected performance in an individual trial can plausibly indicate either higher skill (e.g. better concentration), or lower challenge (easier-to-negotiate random placement of obstacles). Both are deviations from the average skill-challenge balance, yet may be associated with higher Flow. Either way, this result undermines the assumption of \cite{Keller2012}'s Flow Intensity model that the direction of challenge:skill ratio can be ignored; our results show that Flow is elevated when skills exceed challenges.
+
+There are admittedly several alternative explanations for this result. One possibility is that performance on some trials is enhanced by increased Flow during the trial - i.e. participants perform better when they `get into Flow'. Another possibility is that the randomly-generated geometric layout of each trial might be more or less easy to negotiate; the `easier' trials would afford faster performance. If, on average, the skill-challenge balance in our task is slightly on the challenging side, then easier trials would also bring the task closer to a balance of skill and task demand. Alternatively, participants may be more likely to report higher Flow (after the fact) on a more successful (hence, more rewarding) trial, because they see their score before they complete the FSS. These alternatives cannot be readily discriminated in the present paradigm (though the first two seem most plausible, see Limitations below).
+
+% Relation to previous Work on skill acquisition and Flow
+How can our approach and the present results be helpful to understand the mechanisms generating the Flow experience?
+
+% it's a good idea to look at Flow in relation to skill, across points in time...because we want to understand the mechanisms generating the experience (and the report of the experience)
+Methodologically, this study follows a {\it time series} approach little used in Flow research, by looking at changes in Flow over time, with relatively highly frequent and non-independent repeated measurements. This contrasts with much prior work which treats Flow as a relatively stable property, and allows us to look at on-task learning.
+
+Learning implies skill increase, which (by game design) implies challenge increase, which (by design of Quadrant/Octant models) together imply Flow increase. As discussed, for such `state Flow' models the assumption of the fixed reference frame leads to the prediction of increased Flow with skill acquisition, which is not supported by our data. It is thus not straightforward to reason about the evolution of Flow, or learning and Flow, based on these models, before resolving the crucial issue of the reference level for above-average task demand and skill.
+
+For the Flow intensity model this particular problem does not arise \citep{Keller2012}. However, the relation of learning and Flow is not entirely straightforward here, either. Increased skills should evantually increase task demands (because skill-learning increases access to the task's deeper levels of challenge), and thus perceived fit of skills and task demands. We did not assess perceived value directly, but it is plausible that time investment in and enjoyment of the game (as indicated by high mean Flow) would {\it also} increase the subjective value of the activity. If this is the case, again higher Flow should be elicited in step with increasing performance. This was not observed.
+
+
+
+% One contribution of our study is how, due to the novelty of the approach, it helps shed light on theoretical models of Flow.
+
+% However, our study highlights the need to look not just at Flow experience, but at the (evolving) cognitive process that generates the experience, which is also related to {\it on-task} learning and skill acquisition.
+
+% Regarding Flow as a dynamic process means it must be bounded, since human psychological processes should be homeostatic (e.g. have no positive feedback loops) to remain viable. Then, the natural homeostatic quality of a bounded dynamic process will tend to maintain Flow self-report at a level proportionate to the temporally local self-concept of skills and challenges. This does agree with our data, but there is less theoretical work available on which to base such a cognitive information-processing view of Flow.
+
+Overall, the lack of mechanistic hypotheses about the processes underlying the proposed dependencies in the Flow models make it difficult to make definite predictions in novel tasks, especially ones with changing task demands and skill, such as here. Prior work has provided some (neuro)cognitive, information-processing views on Flow \citep{Marr2001,Cowley2008,Simlesa2018}. Such work could provide an approach to make cognitive hypotheses about Flow, but these models have not been empirically tested, so it is unclear which (if any) to follow.
+
+The aim of future work should then be to find out: what cognitive processes are {\it specific} to Flow-inducing task performance (in different stages of learning), but also {\it general} to multiple performance-domains. By so doing, we can in future attempt to clarify empirical observations by reference to a distinct cognitive theory of how Flow is generated.
+
+% Without aiming to propose a new model here, we can, based on our behavioural data, consider Flow and learning
+A possibly useful novel way to view Flow and learning is via task complexity. Flow has been proposed to be possible in {\it any} task, complex (e.g. car driving) or simple (e.g. dish washing) \citep{Csikszentmihalyi1999}, but has also been proposed to depend on perceived task value as well as challenge--skill balance \citep{Keller2012}. One way to resolve these ideas is to consider that the individual can {\it introduce} complexity (or value) to their activity if they appear to have exhausted a task's potential to challenge them. \cite{Nakamura2002} suggest such an exploratory mechanism to explain how individuals maintain Flow in complex tasks: ``As people master challenges in an activity...to continue experiencing flow, they must identify and engage progressively more complex challenges.'' The corollary for simple tasks is that individuals {\it create} complexity, e.g. with self-defined goals \citep{Rauterberg1995}. For example, a similar state to Flow, called the Zone, has been reported for machine-gambling addicts whose pastime is in fact skill-free, but who nevertheless believe that they are skilled \citep{Schull2014}.
+
+In other words, complex tasks have deep structure to be learned, requiring non-trivial skill acquisition for any duration of learning and thus a shallow LC (learning is slow). Importantly, the skill level does not quickly peak, such as with simpler tasks like washing the dishes, where Flow might be obtained but cannot strongly interact with learning (without self-created complexity). Learning comes into play when we consider that the same task can appear at first simple and later complex, e.g. as our experiment game.
+
+% Relation to previous Work on eye blink rate
+\subsection*{Learning, Flow, and sEBR}
+Our evidence suggests a clear linear trend relating sEBR and LCs (Fig.~\ref{fig:EBRvLC}): the larger the sEBR, the steeper the LC slope (or: the higher the LC intercept). The distance of data-points from the fitted model values also closely match the distribution of Flow mean scores, meaning that individuals with lowest Flow also diverge the most from the sEBR$\times$LC model. Interaction analysis then supports the idea that sEBR correlation with LC is stronger the higher the mean Flow. We thus claim that there is a genuine sEBR--LC relationship that is moderated by Flow. We cannot decide causality based on our data, but there is literature relevant to mechanisms, that can help identify future directions of inquiry.
+
+Learning is influenced both by psychological factors (motivation, prior experience) and physio-/neurological factors. One potentially relevant factor for studying Flow and skill acquisition is the well-established relationship between attention and striatal dopamine levels \citep{Dreisbach2005}. The striatum plays a major role in decision making and reward/aversion processing, moderated by the level of tonic dopamine D2-receptors therein; the postsynaptic levels of dopamine can thus bias the entire learning process. This is illustrated for example in studies of `attentional blink' (AB) by Slagter and others \citep{Slagter2012,COLZATO2008}), which suggest a U-shaped function between tonic striatal dopamine and AB size. In other words, very high or low levels of dopamine D2-receptor density can make attention updating too rapid (distractable) or too slow (inattentive).
+
+sEBR has been suggested as an externally-measurable index of striatal dopamine level (though caution is needed, see \cite{dang2017spontaneous}). Early work by \cite{Karson1983} linked sEBR to striatal dopamine in humans and other primates. \cite{Taylor1999} then localised to the caudate nucleus, whose normal function is implicated in classification learning \citep{Seger2005}; caudate nucleus volumetric asymmetry is implicated in inattention symptomatology \citep{Schrimsher2002}. Later work from \cite{Slagter2015} has shown that sEBRs may relate specifically to avoidance learning; others have linked dopamine levels and sEBR to perseverance, distractibility and cognitive control \citep{Muller2007,Dreisbach2005}. Finally, \cite{DeManzano2013} have shown that  predisposition to experience Flow is positively correlated with striatal dopamine D2-receptor availability (measured in PET), specifically in caudate and putamen, and stronger in right hemisphere than left.
+
+Let us consider learning as a process whereby perception, cognition and action become attuned to task demands. In our game task, learning involves high-frequency decision making with respect to continuously updating stimuli of uniform kind (not unlike AB task, a continuous performance test designed to probe AB size \citep{Slagter2012}). In this view, the sEBR--LC relationship could be interpreted as showing that higher D2 density indexed by sEBR supports learning (LC slope). An alternative interpretation is that it reflects higher distractability in the early phases of learning (LC intercept).
+
+The underlying mechanism could be that higher dopamine levels permit more rapid attention updating and thus more fluid response to changing task demands. This can work despite \cite{Slagter2012}'s proposed U-shaped function: because our game-task constantly maintains a level of demand slightly greater than the participants' skill. Thus, in this context, higher sEBR tends to be better, possibly because the {\it requirement} for rapid attention updating grows with the learned task skill.
+
+Less subjective Flow was reported by those participants who deviated (positively or negatively) from this relationship. Lower Flow could be due to, e.g., misalignment of task demands and attentional updating rate, creating a more effortful experience. So the observed moderation by Flow scores of the sEBR--LC relationship could be speculated to have a basis in adjusting attention updating, in response to changing task speeds, physiologically underpinned by the nigro-striatal DA system. In other words, it may not be the case that an absolute level of striatal dopamine should predict learning, but rather an individual level relative to how each participant relates to the task (vis-\'{a}-vis gaming experience, motivation, fine motor skills, or potentially many other variables). If a participant's tonic dopamine is not at their ideal level for this task, they might nevertheless do well in the task, and yet find the experience more effortful and less fluid (than is suggested as Flow-like by wording of the FSS).
+
+
+\subsection*{Limitations and Future Work}
+Our study had a small convenience sample because (a) the recording paradigm was extensive (around eight hours of contact time), and (b) it was to some degree an exploratory study; both implying the need to constrain datasets to tractable sizes. It is worth noting that while we recruited only 9 participants, we collected a significant amount of behavioural and physiological data for each participant over a course of two weeks and 8 recording sessions. This amounts to a particularly rich dataset allowing us to dig deep into the underpinnings of skilled high speed steering and Flow. Moreover, given the fact our experimental paradigm has not been used previously, we could not {\it a priori} easily estimate the statistical power required to discover significant effects. However, our results ended up being both strikingly {\it similar} and {\it strong} within each participant, suggesting that collecting a larger sample size would likely have {\it not} changed the pattern of the results or provided more in-depth insights. Regardless of the justifications, the sample size and method are minor limitations to be remedied in future work. Additionally, lacking experimental manipulations the study cannot make strong causal claims, which could be improved by recording separate conditions of the game task, e.g. with varied difficulty levels.
+
+As stated above, there are different plausible explanations of the main result linking Flow and performance. If FSS reports were indeed influenced by seeing the score beforehand, this could be considered a drawback. However, the game gives such clear and direct feedback on performance (i.e. after collisions), that it is likely that self-assessment of performance would be similar with or without seeing the score. The score can thus be considered just a reinforcement of the perceived fit of skills and demands, which is anyway a required part of Flow reporting \citep{Keller2012}.
+
+Trial-by-trial analysis is limited by the Flow self-report which only has one data point per trial. It would be more powerful to analyse {\it inside} each trial. In our data, self-reported Flow is a point model of an entire trial, for which the participant knows their score. Self-reported Flow is thus an after-the-fact report, and could be criticized for not capturing the in-the-moment {\it experience of Flow}, which might fluctuate greatly during a trial. Analysing the fluctuation of Flow-experience requires us to model individual actions and/or their outcomes, and sample Flow during performance. This is a difficult challenge, because paying attention to one's phenomenal state might easily disrupt the very processes sustaining that state, especially for Flow which is unreflective by definition. Future work should aim to model the conditions of Flow ({\sf C1--3}) in real-time, while simultaneously recording participant physiology, to uncover in greater detail the relationships involved. The existing dataset will be used for this purpose, in a pending report on the biosignals recorded with high temporal resolution, primarily electro-dermal activity.
+
+To further explore the possible role of striatal dopamine, it would be interesting to experimentally manipulate the game to adjust the distance between obstacles, thus altering the attention-updating rate required to navigate without collisions (motor precision variation can be minimised by a suitably long training period). This manipulation could be varied in response to measurements of sEBR (which can be automated, e.g. by using electro-oculography \citep{toivanen2014}), to systematically investigate whether sEBR holds explanatory power with respect to individual variability in learning.
+
+
+\subsection*{Conclusion}
+
+% We report results that show how Flow assessment relates to the local reference frame provided by LCs; with evidence that the LC across sessions is predicted by participants' spontaneous blink rate.
+We report results that self-reported Flow in a novel, challenging, and engaging high-speed steering task relates to trial-by-trial task performance relative to the learning curve: `better than expected' trials have higher Flow scores, and `worse than expected' trials have lower scores. The average level of self-reported Flow was high, as the game was specifically designed to meet the main preconditions of Flow, including balance of current skill and challenge. Perhaps surprisingly, Flow did not seem to change with global skill development or improvement in task performance.
+
+We also report evidence that slope of the learning curve (total play time about 2 h, distributed over two weeks) is predicted by the participants' spontaneous blink rate, moderated by global Flow. This relationship potentially indicates a role for striatal dopamine in learning the visuomotor steering task, which may interact with the experience of Flow.
+
+Understanding how perceptual-cognitive and motor processes underlying performance give rise to phenomenological experiences, such as Flow, and how the phenomenal experiences relate to performance on the other is an important topic for understanding human motivation and performance. This study contributes to this goal and we hope will inspire more inquiry into the dynamics of the Flow experience in different stages of learning a skill.
+
+
+\subsection*{Context}
+The three senior authors conceived and guided the work. BC (the lead author) has studied computer gameplay from the perspective of performance, psychophysiology and emotional experiences. OL (the last author) has studied visuomotor skill in the domain of high-speed steering, and developed the game with JV to extend the research into the direction of Flow research. JP (the second author) has studied emotions and decision-making in games of skill and chance, and written on the similarities and differences between the Zone and Flow phenomena. Because these authors share a keen interest in understanding the development of expertise and the phenomenon of Flow, it was decided to join forces and put together a team of researchers to develop the present experiment on the basis of the `Flow-inducing' high-speed steering game designed earlier. The other authors (all more junior graduate students) were recruited to work as part of their studies. This experiment is part of a larger effort to initiate a line of research into the neurocognitive processes underlying Flow and expert performance, combining experimental, psychophysiological and computational methods.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% POST-HOC MATERIAL OF VITAL IMPORTANCE %%%%%%%%%%%%%%%%%%%%
+\bibliography{cleanbib/CogCarFlow_bib}
+
+
+\section*{Acknowledgements}
+Authors wish to thank Kalle Toikka for conceptual contributions, data gathering, and team-work.
+
+
+\section*{Author contributions statement}
+% please edit as appropriate
+OL, JP and BUC conceived the study.
+OL and JV designed the gameplay.
+JV implemented the game.
+BUC and TT designed and implemented the data collection.
+NL, TT, PP, RF, VPI, and JP translated the FSS.
+All authors participated in decisions on the experiment specifications.
+RF, VPI, NL, PP, and TT conducted the experiment.
+BUC, VPI, TT, RF, PP, NL, JP, and OL analysed and interpreted the results.
+BUC, JP and OL drafted the paper.
+All authors participated in writing and reviewing, and approved the manuscript.
+
+
+% \section*{Additional information}
+
+% The authors declare no competing interests.
+
+% \section*{Supplementary Information}
+%formatted with minipages to prevent floating and force visuals to sit under their subheadings
+% \input{sect_supple}
 
 \end{document}
