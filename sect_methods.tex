@@ -60,7 +60,7 @@ The participant was seated in a Playseat Evolution Alcantara playseat (Playseats
 
 Eye movements (not reported here) were measured using Pupil Labs Binocular 120 Hz eye tracker (Pupil Labs UG haftungsbeschränkt, Berlin, Germany), stabilised with a custom-built headband. Pupil Capture software was used to collect the data from the pupil hardware. Gaze direction was calibrated using ten markers on the display, a minimum of three times during the session. Additional calibrations were done if needed. Eye movement signal was recorded at 60 Hz.
 
-For electrodermal activity (EDA, not reported here), Ag-AgCl electrodes with 0.5\% saline paste were attached to the medial side of the left foot with adhesive skin tape and gauze. The plantar site was used instead of the palmar site to minimise artefacts resulting from the use of the steering wheel, as per guidelines by \cite{boucs12}. Blood volume pulse (BVP) was measured using a pulse oximeter sensor attached to the left index toe of each participant. EDA and BVP were recorded at 128 Hz sampling rate using NeXus-10 (Mind Media B.V, Roermond-Herten, The Netherlands) connected to a laptop via bluetooth. The data was recorded using Trusas signal acquisition software, available open access at \url{https://github.com/jampekka/trusas-nexus}.
+% For electrodermal activity (EDA, not reported here), Ag-AgCl electrodes with 0.5\% saline paste were attached to the medial side of the left foot with adhesive skin tape and gauze. The plantar site was used instead of the palmar site to minimise artefacts resulting from the use of the steering wheel, as per guidelines by \cite{boucs12}. Blood volume pulse (BVP) was measured using a pulse oximeter sensor attached to the left index toe of each participant. EDA and BVP were recorded at 128 Hz sampling rate using NeXus-10 (Mind Media B.V, Roermond-Herten, The Netherlands) connected to a laptop via bluetooth. The data was recorded using Trusas signal acquisition software, available open access at \url{https://github.com/jampekka/trusas-nexus}.
 
 \paragraph{Flow Short Scale} To measure self-reported Flow, participants were asked to fill in the Flow Short Scale (FSS) after each trial \citep{Rheinberg2003,Engeser2008}. FSS has 10 core items which load the subfactors {\it fluency of performance} (6 items) and {\it absorption by activity} (4 items); plus 3 items for {\it perceived importance}. The response format of FSS is a 7-point Likert scale ranging from {\it Not at all} to {\it Very much}. Higher scores on the scales indicate higher experienced Flow and perceived importance. Example items include ``My thoughts/activities run fluidly and smoothly'' ({\it fluency of performance}), ``I do not notice time passing'' ({\it absorption by activity}), and ``I must not make any mistakes here'' ({\it perceived importance}). See Supplementary Information for full English text and Finnish translation.
 
@@ -89,37 +89,15 @@ The final spontaneous eye blink rate was calculated as median blinks per minute 
 baseline measurement sessions.
 
 \subsection*{Statistical methods}
-All statistical data processing reported herein was implemented with {\sf R} platform for statistical computing \citep{R2014}. Where possible, exact corrected {\it p}-values are reported; inequalities are reported where exact values were not available. All {\it p}-values were corrected for multiple comparisons using Bonferroni-Holm. For all simple correlations we calculated Pearson's correlation coefficient, because all data in these tests were shown to be normally distributed by Shapiro-wilk tests and associated Q-Q plots. The {\sf R} code and data used to produce all analyses and figures is permanently available online at \url{https://doi.org/10.6084/m9.figshare.7268387}.
+All statistical data processing reported herein was implemented with {\sf R} platform for statistical computing \citep{R2014}. Where possible, exact corrected {\it p}-values are reported; inequalities are reported where exact values were not available. All {\it p}-values were corrected for multiple comparisons using Bonferroni-Holm. For all simple correlations we calculated Pearson's correlation coefficient, because all data in these tests were shown to be normally distributed by Shapiro-wilk tests and associated Q-Q plots. The {\sf R} code and data used to produce all analyses and figures is permanently available online at % FIXME - NEW FIGSHARE FOR BLINK PAPER
 % tests   pvals    padj
-% 1            LCxFlow 0.08000 0.88000
-% 2           FlowXssn 0.77000 1.00000
-% 3       FlowXssn1dur 0.90000 1.00000
-% 4       FlowXssn2dur 0.90000 1.00000
-% 5       FlowXssn3dur 0.03000 0.39000
-% 6       FlowXssn4dur 0.02000 0.28000
-% 7       FlowXssn5dur 0.90000 1.00000
-% 8       FlowXssn6dur 0.03000 0.39000
-% 9       FlowXssn7dur 0.90000 1.00000
-% 10      FlowXssn8dur 0.90000 1.00000
-% 11      FlowXssn9dur 0.90000 1.00000
-% 12          FlowXdev 0.00020 0.00320
-% 13           sEBRxLC 0.21480 1.00000
-% 14         sEBRxFlow 0.70000 1.00000
-% 15      FlowXsEBRdev 0.00300 0.04500
-% 16  sEBRxLCxFlow+1SD 0.00001 0.00018
-% 17 sEBRxLCxFlow_mean 0.00001 0.00018
-% 18  sEBRxLCxFlow-1SD 0.15000 1.00000
+% 1           sEBRxLC 0.21480 1.00000
+% 2         sEBRxFlow 0.70000 1.00000
+% 3      FlowXsEBRdev 0.00300 0.04500
+% 4  sEBRxLCxFlow+1SD 0.00001 0.00018
+% 5 sEBRxLCxFlow_mean 0.00001 0.00018
+% 6  sEBRxLCxFlow-1SD 0.15000 1.00000
 
-
-\subsubsection*{Linear models of learning}
-For {\sf RQ1}, participant-wise linear regression models were fitted using {\it lm} function in {\sf R}, which also supplies $R^2$ values. The same approach was used to fit the `grand model' to group-wise data (i.e. pooled participants).
-
-For {\sf RQ2}, we obtained the independent variable as follows. For each participant and for each trial (40 trials in total), we subtracted predicted trial duration (y-value of power-law performance line) from observed trial duration, thus obtaining power-law model residuals, in units of log(sec). We refer to these within-participant trial-duration residuals as {\it deviation scores}, because they represent how much each observed trial duration deviates from the duration predicted by the model. Note, residuals are in the space of log-transformed trial durations in seconds and are therefore equivalent to ratio of performance in seconds. So for similar deviation scores from two trials, the later deviation represents a larger (or equal) effect in seconds.
-
-Specifically, we first fit a linear mixed model with non-standardized Flow scores as the dependent variable, deviation scores as the predictor, and participant (numerical participant identifier ranging from 1 to 9) as a random factor with both random intercept and slope. This approach was chosen to handle the non-independence of data points within participants (see \cite{Bates2015_lme4}).
-
-Note that that there is no consensus on the best way to obtain {\it p}-values or estimates of effect sizes from linear mixed models. We have treated the {\it t} statistic as a {\it z} statistic using a standard normal distribution as a reference, and followed the method by \cite{nakagawa2013general} to obtain pseudo-$R^2$ values. Another way to statistically evaluate the significance of these results is via the binomial distribution: The (two-tailed) probability of 9 negative slopes (should the probability of a negative slope per participant be 0.5, that is, fully random) is {\it p} = .007.
-% AIC/BIC can be used to report ES for Linear mixed model if pseudo R^2 is not liked by reviewers?
 
 \subsubsection*{Interaction analysis}
 For {\sf RQ3}, to conduct a {\it simple slopes} interaction analysis we used the {\sf jtools} package for {\sf R} \citep{jtools}. The simple slopes analysis was conducted on a linear regression model (using {\it lm} function in {\sf R}) with sEBR as dependent variable; predictors were main effects of, and interaction of, Flow and LC. The slope of LC was estimated when Flow was held constant at its mean$\pm$1SD, producing the estimates shown in Table~\ref{tab:simpslopes} (see Results).
