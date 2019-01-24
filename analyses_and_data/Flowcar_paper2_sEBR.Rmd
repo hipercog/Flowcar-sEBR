@@ -1,0 +1,224 @@
+---
+title: "Flowcar_paper2_sEBR"
+author: "Ben Cowley"
+date: "22 January 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(reshape2)
+library(haven)
+library(lmerTest)
+library(jtools)
+library(huxtable)
+library(ggfortify)
+library(cowplot)
+
+```
+
+
+
+# Research Questions
+
+ 1. Does the (approximate) baseline sEBR of each participant predict their performance or Flow experience?
+ 2. Does sEBR variation across sessions (of each participant) affect their perceived cognitive performance, i.e. Flow, PI, skill:demand?
+ 3. Does sEBR variation across sessions, and actual performance (i.e. duration, session-wise power-law slope), affect perceived cognitive performance (Flow, PI, skill:demand)?
+ 4. Does sEBR variation across sessions, and expected-performance difference (i.e. LC-to-duration distance) affect perceived cognitive performance (Flow, PI, skill:demand)?
+
+
+## RQ1
+RQ1 is addressed by participant-wise mean Flow, learning curve slope, mean sEBR (across sessions). We then calculate the absolute residuals as the agreement between observations and the linear model of LC and sEBR.
+
+```{r between-subjs data}
+df <- read_csv("rq1_between.csv")
+lm.fit <- with(df, lm(LC ~ sEBR)) #get the linear fit of LC and sEBR
+df$dst <- abs(resid(lm.fit)) #calculate the exact residuals as 'distance'
+head(df, n = 9)
+```
+
+### RQ1 Analysis
+RQ1 is positively answered by the analysis from the first paper. LC and sEBR are weakly correlated, but the residual distance measure appears to be strongly correlated to mean Flow, motivating an interaction model (for which the data is first centered). The output of this model, i.e. the overall 3-way relationship, is a bit hard to interpret (some effort has been made already in the paper): but conceivably the simplest explanation is that performance determines Flow, modulated by baseline attention capacity indexed by sEBR.
+
+
+```{r RQ1}
+ggplot(df, aes(x=sEBR, y=LC, color=FM)) +
+  geom_point() +
+  geom_text(aes(label=Part), hjust=0, vjust=0) +
+  geom_smooth(method="lm", formula=y~x, se=F, alpha=0.8, linetype="dashed", size = 0.5) +
+  scale_color_gradient(low="green", high="red")
+
+# Shapiro-Wilk testing and plots show sEBR data meets normality assumption, model distance metric doesn't
+shapiro.test(df$sEBR)
+shapiro.test(df$dst)
+with(df, {qqnorm(sEBR, main = "sEBR Normal Q-Q Plot")
+          qqline(sEBR)
+          qqnorm(dst, main = "sEBRxLC model deviations Normal Q-Q Plot")
+          qqline(dst)})
+
+with(df, cor.test(LC, sEBR, method = "spearman"))
+with(df, cor.test(FM, sEBR, method = "spearman"))
+with(df, cor.test(FM, dst, method = "spearman"))
+
+ggplot(df, aes(x=FM, y=dst)) +
+  geom_point() +
+  geom_text(aes(label=Part), hjust=0, vjust=0) +
+  geom_smooth(method="lm", formula=y~x, se=F, alpha=0.8, linetype="dashed", size = 0.5)
+
+df.ctr <- df %>% mutate_at(vars(-Part), funs(scale), scale = FALSE) %>% mutate_at(vars(-Part), funs(drop))
+fiti <- with(df.ctr, lm(sEBR ~ FM*LC))
+summ(fiti)
+ss <- sim_slopes(fiti, pred = "LC", modx = "FM", jnalpha = 0.05, johnson_neyman = TRUE, jnplot = TRUE, cond.int = TRUE)
+interact_plot(fiti, pred = "LC", modx = "FM", centered = "none", plot.points = TRUE, interval = TRUE, point.shape = TRUE)
+plot(ss)
+as_huxtable(ss)
+ss
+```
+
+
+Discovery of this interaction motivates us to look at the session-level relationships between sEBR, self-reports, and performance measures.
+
+## RQ2-4
+
+RQ2-4 are addressed by session-wise data, either gathered directly at the session level (sEBR, skill:demand self-reports), or aggregated from run-level data (performance, Flow and PI self-reports). Additional variables are created by per-session power-law fits, i.e. fitting linear models to the log-log transformed duration by runs within each session; the slope and intercept are added to the dataframe.
+
+NOTE: when we aggregate the distance-from-powerlaw variable within sessions, we tend to be summing and dividing both positive and negative numbers, with the result that per-session distance scores tend to get very small: implying this approach might be non-optimal.
+
+```{r session data}
+## DATA WRANGLING ----
+blk <- read_rds("BLINK_ANALYSIS/blink_data.RData")
+fssl <- read_rds("fss_learning.RData")
+
+inc.ssn <- c(1, 5, 6, 7, 8)
+
+brate <- cbind(blk$blinkrate.session1, blk$blinkrate.session5, blk$blinkrate.session6, blk$blinkrate.session7, blk$blinkrate.session8)
+long.br <- gather(as.data.frame(t(brate)), "Parti", "brate")
+ssn.lc <- filter(fssl, Session %in% inc.ssn) %>% group_by(Participant, Session) %>% summarise(ssn.lc = as.numeric(lm(ln.duration ~ log(Run))$coefficients[2]), ssn.in = as.numeric(lm(ln.duration ~ log(Run))$coefficients[1]))
+
+df <- filter(fssl, Session %in% inc.ssn) %>% 
+  select(-Run, -cumrun, -slope, -intercept, -flow_z, -demand, -skill, -skilldemand) %>% 
+  group_by(Participant, Session) %>% 
+  summarise_all(funs(mean), na.rm = TRUE) 
+df <- df %>%
+  bind_cols(ssn.lc, long.br, filter(fssl, Session %in% inc.ssn & Run == 5) %>% select(demand, skill, skilldemand)) %>%
+  select(1:2, brate, duration, ln.duration, learning_curve, distance, ssn.lc, ssn.in, everything(), -Participant1, -Session1, -Parti) %>%
+  mutate(skidem = skill - demand)
+
+#### Centering steps: br * Participant, self-rep / perf x all ####
+df <- group_by(df, Participant) %>% mutate_at(vars(brate), funs(scale), scale = FALSE)
+df <- df %>% mutate_at(vars(-Participant, -Session, -brate), funs(scale), scale = FALSE)
+```
+
+
+```{r Exploratory_Visuals}
+## SIMPLE VISUALS ----
+## PCA
+pca <- prcomp(filter(df[,3:20], !is.na(brate)), scale. = TRUE)
+summary(pca)
+autoplot(pca, loadings = TRUE, loadings.colour = 'blue', loadings.label = TRUE, loadings.label.size = 3)
+
+# histograms of everything
+ggplot(gather(df[-(1:2)]), aes(value)) + 
+  geom_histogram() + 
+  facet_wrap(~key, scales = 'free_x')
+```
+
+
+## RQ2
+"Does sEBR variation across sessions (of each participant) affect their perceived cognitive performance, i.e. Flow, PI, skill:demand?"
+
+First we check the main effects of each self-report variable wrt sEBR, trying to see which 'family' of self-report (Flow, PI, skill:demand) has the strongest relationships.
+
+```{r rq2_brate_simple_LMMs}
+# blink rate predicted by flow components
+summary(lmer(brate ~ flow + (1 | Participant), data = df))
+summary(lmer(brate ~ fluency + (1 | Participant), data = df))
+summary(lmer(brate ~ absorption + (1 | Participant), data = df))
+# blink rate predicted by perceived-importance components
+summary(lmer(brate ~ pi1 + (1 | Participant), data = df))
+summary(lmer(brate ~ pi2 + (1 | Participant), data = df))         # .
+summary(lmer(brate ~ pi3 + (1 | Participant), data = df))
+summary(lmer(brate ~ pi_total + (1 | Participant), data = df))
+# blink rate predicted by skill-demand components
+summary(lmer(brate ~ skill + (1 | Participant), data = df))       # *
+summary(lmer(brate ~ demand + (1 | Participant), data = df))
+summary(lmer(brate ~ skilldemand + (1 | Participant), data = df))
+summary(lmer(brate ~ skidem + (1 | Participant), data = df))
+```
+
+Finding PI and skill:demand to be the strongest, we can examine a couple of interaction models in a bit more detail.
+
+```{r rq2_brate_interaction_LMMs}
+# BLINK RATE ~ SKIDEM * PI-1
+cor(df$skidem, df$pi1)
+lmm.br.sp1 <- lmer(brate ~ skidem*pi1 + (1 | Participant), data = df) # **
+summary(lmm.br.sp1)
+ss <- sim_slopes(lmm.br.sp1, pred = "pi1", modx = "skidem", jnalpha = 0.05, johnson_neyman = TRUE, jnplot = TRUE, cond.int = TRUE)
+interact_plot(lmm.br.sp1, pred = "pi1", modx = "skidem", centered = "none", interval = TRUE, plot.points = TRUE, color.class = "Qual2")
+plot(ss)
+as_huxtable(ss)
+ss
+
+# BLINK RATE ~ SKIDEM * PI-2
+cor(df$skidem, df$pi2)
+lmm.br.sp2 <- lmer(brate ~ skidem*pi2 + (1 | Participant), data = df) # ***
+summary(lmm.br.sp2)
+ss <- sim_slopes(lmm.br.sp2, pred = "pi2", modx = "skidem", jnalpha = 0.05, johnson_neyman = TRUE, jnplot = TRUE, cond.int = TRUE)
+interact_plot(lmm.br.sp2, pred = "pi2", modx = "skidem", centered = "none", interval = TRUE, plot.points = TRUE, color.class = "Qual2")
+plot(ss)
+as_huxtable(ss)
+ss
+```
+
+
+## RQ3
+"Does sEBR variation across sessions, and actual performance (i.e. duration, session-wise power-law slope), affect perceived cognitive performance (Flow, PI, skill:demand)?"
+
+Extending the approach above, we can then look at some performance measures in a three-way interaction.
+
+```{r rq3_perf_simple_LMMs}
+fiti <- lmer(duration ~ brate*skill*pi1 + (1 | Participant), data = df)       # **
+summ(fiti)
+ss <- sim_slopes(fiti, pred = "brate", modx = "skill", mod2 = "pi1", jnalpha = 0.05, johnson_neyman = TRUE, jnplot = TRUE, cond.int = TRUE)
+interact_plot(fiti, pred = "brate", modx = "skill", mod2 = "pi1", centered = "none", interval = TRUE, plot.points = TRUE, color.class = "Qual2")
+plot(ss)
+as_huxtable(ss)
+ss
+```
+
+
+## RQ4
+"Does sEBR variation across sessions, and expected-performance difference (i.e. LC-to-duration distance) affect perceived cognitive performance (Flow, PI, skill:demand)?"
+
+For the 'distance' measure of deviation from expected performance (aggregated from the run-level metric reported in paper 1), we see a 2-way interaction of sEBR and PI:
+
+```{r rq4_perfper_simple_LMMs}
+fiti <- lmer(distance ~ brate*pi2 + (1 | Participant), data = df)    # **
+summ(fiti)
+ss <- sim_slopes(fiti, pred = "brate", modx = "pi2", jnalpha = 0.05, johnson_neyman = TRUE, jnplot = TRUE, cond.int = TRUE)
+interact_plot(fiti, pred = "brate", modx = "pi2", centered = "none", interval = TRUE, plot.points = TRUE, color.class = "Qual2")
+plot(ss)
+as_huxtable(ss)
+ss
+```
+
+
+## Summary
+
+The above analysis is obviously preliminary and doesn't account for several possible issues. What is the underlying relationship that is producing these results? It's not clear, and it could (with low probability) just be type 1 error.
+
+However one final observation is worth making: the central theme of the session-level analysis is that blink rate is varying around its mean, across sessions, and this variance appears to have a relationship with some self-report and performance measures. As well it might, if sEBR really indexes some aspect(s) of attention. So a simple sanity check is to examine the variance of sEBR compared to one or more of the other variables. The bar plot following shows a clear correspondence in (scaled) variability of sEBR and 'skidem', meaning that the same individuals whose sEBR was varying, had variations in the self-reported skills and demands per session. This supports the idea that exploratory analysis, guided by the broad RQs above, is going to pay off.
+
+```{r final checks}
+## Check variance of key variables
+dfvar <- group_by(df, Participant) %>% 
+  summarise_at(vars(brate, skidem), funs(var), na.rm = TRUE) %>% 
+  mutate_at(vars(brate, skidem), funs(scale), center = FALSE) %>%
+  mutate_at(vars(brate, skidem), funs(drop))
+dfvar$Participant <- factor(dfvar$Participant, levels = dfvar$Participant[order(dfvar$brate)])
+# bar plot of key variable variance
+dfv.m <- melt(dfvar, id.vars = "Participant")
+ggplot(dfv.m, aes(Participant, value)) + geom_bar(aes(fill = variable), position = "dodge", stat="identity")
+```
