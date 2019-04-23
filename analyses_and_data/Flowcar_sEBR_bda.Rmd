@@ -1,0 +1,245 @@
+---
+title: 'Flowcar_paper2_sEBR: Bayesian perspective'
+author: "Ville-Pekka Inkilä"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+This document represent an alternative modelling approach (bayesian) on blink/flow data. Unlike frequentist methods, that are relying on estimators (e.g. MLE), probabilistic modelling and bayesian inference methods sample from the joint posterior distribution of model parameters.
+
+$$p(\theta | D) \propto p(D|\theta)p(\theta)$$
+
+All models were fit with [Stan probabilistic programming languge](https://www.jstatsoft.org/article/view/v076i01/v76i01.pdf), utilising No-U-Turn Hamiltonian Monte Carlo sampler. Furthemore, I used [brms](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf) -package for model fitting because it has the same model syntax as lme4. All model priors were defined as [generic weakly informative](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations).
+
+On each research question, I used [Leave-One-Out Cross-Validation](https://mc-stan.org/loo/) method for model comparisons and selection of "the best model" according to its predictive accuracy. 
+
+```{r packdata}
+## Libraries
+library(tidyverse)
+library(modelr)
+library(tidybayes)
+library(ggridges)
+library(rstan)
+library(brms)
+
+## Path to the large data files
+the_path <- getwd() ## Modify accordingly
+
+## Models
+r1_models <- readr::read_rds(file.path(the_path,"R1_models.rds"))
+r2_models <- readr::read_rds(file.path(the_path,"R2_models.rds"))
+r3_models <- readr::read_rds(file.path(the_path,"R3_models.rds"))
+r4_models <- readr::read_rds(file.path(the_path,"R4_models.rds"))
+
+## Model comparisons (LOO)
+r1_loo <- readr::read_rds(file.path(the_path,"R1_loo.rds"))
+r2_loo <- readr::read_rds(file.path(the_path,"R2_loo.rds"))
+r3_loo <- readr::read_rds(file.path(the_path,"R3_loo.rds"))
+r4_loo <- readr::read_rds(file.path(the_path,"R4_loo.rds"))
+```
+
+All models and model comparisons are saved in separate rds-files
+
+# Research Question 1
+
+Fitted models below (first is an intercept-only).
+
+```{r r1mods}
+purrr::map(r1_models$models, ~.$formula)
+```
+
+## Model comparisons
+
+```{r r1comp}
+r1_loo
+```
+
+According to the LOO model comparisons, the LC and FM interaction model had the best out-of-sample predictive accuracy. According to this comparison method, the predictive accuracy of the interaction model (fourth) is lower than the intercept-only model.
+
+## The best model
+
+Checking the posterior predictive distribution. The lognormal response distribution is acceptable fit to data although there is visible variation between samples.
+
+```{r r1thecheck}
+brms::pp_check(r1_models$models[[4]])
+```
+
+Model parameter effects (both sEBR and FM variables were standardised prior to fitting).
+
+```{r r1themod}
+r1_models$models[[4]]
+```
+
+Let's look fixed effects (intercept, LC, FM, LC:FM) posterior sample distributions (with 50% and 95% Highest-Density Intervals). Model diagnostics (Eff.Sample and Rhat) indicate acceptable level of convergence between the four Markov chains.
+
+```{r r1themod2}
+r1_models$models[[4]] %>%
+  tidybayes::spread_draws(`b_.*`, regex = TRUE) %>%
+  dplyr::select(-c(.chain:.draw)) %>%
+  tidyr::gather(variable, value) %>%
+  ggplot2::ggplot(aes(x=value, y=variable)) +
+  geom_halfeyeh() +
+  geom_vline(xintercept = 0, linetype=2) +
+  theme_bw()
+```
+
+If using the 95% HDI (thin black line) as a decision-criterion, learning curve main-effect and the interaction term between learning curve and mean flow (besides the intercept) effects appear to be non-zero.
+
+According to the presented model effects, high reported flow and low learning curve equal to higher median blink rate?
+
+```{r r1themod3}
+brms::marginal_effects(r1_models$models[[4]], effects = "LC:FM", surface=TRUE)
+```
+
+# Research Question 2
+
+Fitted models below (first is an intercept-only).
+
+```{r r2mods}
+purrr::map(r2_models$models, ~.$formula)
+```
+
+## Model comparisons
+
+```{r r2comp}
+r2_loo
+```
+
+According to the LOO model comparisons, the intearction model with skidem and perceived importance 2 had the best out-of-sample predictive accuracy.
+
+## The best model
+
+Checking the posterior predictive distribution. The fit seems acceptable if not perfect.
+
+```{r r2thecheck}
+brms::pp_check(r2_models$models[[12]])
+```
+
+```{r r2themod}
+r2_models$models[[12]]
+```
+
+Only the skidem:pi2 inteaction terms effects appear to be non-zero (95% HDI).
+
+```{r r2themod2}
+r2_models$models[[12]] %>%
+  tidybayes::spread_draws(`b_.*`, regex = TRUE) %>%
+  dplyr::select(-c(.chain:.draw)) %>%
+  tidyr::gather(variable, value) %>%
+  ggplot2::ggplot(aes(x=value, y=variable)) +
+  geom_halfeyeh() +
+  geom_vline(xintercept = 0, linetype=2) +
+  theme_bw()
+```
+
+Visualising the interaction term.
+
+```{r r2themod3}
+brms::marginal_effects(r2_models$models[[12]], effects = "skidem:pi2", surface = TRUE)
+```
+
+# Research Question 3
+
+Fitted models below (first is an intercept-only).
+
+```{r r3mods}
+purrr::map(r3_models$models, ~.$formula)
+```
+
+## Model comparisons
+
+```{r r3comp}
+r3_loo
+```
+
+According to the LOO model comparisons, the intearction model with brate, skill and perceived importance 1 had the best out-of-sample predictive accuracy.
+
+## The best model
+
+Model check. The fit is questionable - another response family distribution should be considered. (perhaps duration as a log-normally distributed).
+
+```{r r3thecheck}
+brms::pp_check(r3_models$models[[2]])
+```
+
+```{r r3themod}
+r3_models$models[[2]]
+```
+
+The skill main-effects appear to have decreasing effect on run duration whereas perceived importance 1 had opposite effects (increasing).
+
+```{r r3themod2}
+r3_models$models[[2]] %>%
+  tidybayes::spread_draws(`b_.*`, regex = TRUE) %>%
+  dplyr::select(-c(.chain:.draw)) %>%
+  tidyr::gather(variable, value) %>%
+  ggplot2::ggplot(aes(x=value, y=variable)) +
+  geom_halfeyeh(size=1) +
+  geom_vline(xintercept = 0, linetype=2) +
+  theme_bw()
+```
+
+```{r r3themod3}
+brms::marginal_effects(r3_models$models[[2]], effects = "brate:skill", surface = TRUE)
+```
+
+# Research Question 4
+
+Fitted models below (first is an intercept-only).
+
+```{r r4mods}
+purrr::map(r4_models$models, ~.$formula)
+```
+
+## Model comparisons
+
+```{r r4comp}
+r4_loo
+```
+
+The interaction model had higher out-of-sample predictive accuracy.
+
+## The best model
+
+Model check. Fitting well.
+
+```{r r4thecheck}
+brms::pp_check(r4_models$models[[2]])
+```
+
+```{r r4themod}
+r4_models$models[[2]]
+```
+
+Blink rate and perceived importance 2 had non-zero (positive) effects.
+
+```{r r4themod2}
+r4_models$models[[2]] %>%
+  tidybayes::spread_draws(`b_.*`, regex = TRUE) %>%
+  dplyr::select(-c(.chain:.draw)) %>%
+  tidyr::gather(variable, value) %>%
+  ggplot2::ggplot(aes(x=value, y=variable)) +
+  geom_halfeyeh(size=1) +
+  geom_vline(xintercept = 0, linetype=2) +
+  theme_bw()
+```
+
+```{r r4themod3}
+brms::marginal_effects(r4_models$models[[2]], effects = "brate:pi2", surface = TRUE)
+```
+
+# Comments / thoughts
+
+Bayesian model fitting (with weakly informative priors) produced similar type of parameter effects as estimated with lme4. Moreover, LOO model selection procedure provided additional information about the most accurate (predicting out-of-sample) models within their respective group of candidate models. I believe, probabilistic modelling offers a powerful way on quantifying the uncertainty of model parameters (even with small N) when using sensible priors  for regularisation.
+
+Based on the reported results, the model type for research question 3 should be re-considered. General linear model might not be sufficient, and thus perhaps generalised linear model (e.g. lognormal) could be applied to improve the model fit.
+
+Should these models be also causally more plausible? Would we still like to model within-session variations instead of relying on these aggregates?
