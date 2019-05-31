@@ -10,7 +10,8 @@ library(huxtable)
 library(ggfortify)
 library(cowplot)
 
-setwd("/home/ben/Benslab/FLOW/extra_analyses/Flow_paper2_sEBR/")
+# setwd("/home/ben/Benslab/FLOW/extra_analyses/Flow_paper2_sEBR/")
+setwd("/home/bcowley/Benslab/FLOW/papers/Flowcar-sEBR/analyses_and_data")
 
 getTrialCors <- function(df, X, Y, id = TRUE)
 {
