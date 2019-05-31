@@ -162,7 +162,7 @@ Each RQ was addressed both by linear regression for comparison, and by Bayesian 
 \paragraph{Linear analyses:}
 For {\bf RQ1} we modelled main effects and interaction of Flow and LC as predictors of sEBR by linear regression. We then conducted simple slopes interaction (SSI) analysis (with {\bf R}'s {\bf jtools} package), estimating slope of LC when Flow was held constant at its mean$\pm$1SD. 
 
-For \textbf{RQ2} we used (restricted maxmimum likelihood) Linear Mixed Models (LMMs) with random effect of participant (using {\bf lmer} package for {\bf R}). SSI analysis estimated the slope of PI-2 when skill-demand was held constant at its mean$\pm$1SD.
+For \textbf{RQ2} we used (restricted maxmimum likelihood) Linear Mixed Models (LMMs) with random effect of participant (using {\bf lmer} package for {\bf R}). SSI analysis estimated the slope of PI.2 when skill-demand was held constant at its mean$\pm$1SD.
 
 \paragraph{Bayesian analysis:}
 Bayesian inference methods were used to sample from the joint posterior distribution of model parameters for performance, sEBR, and self-report data, as per $p(\theta|D) \propto p(D|\theta)p(\theta)$. We thus constructed models for each combination of relevant parameters, starting with the intercept-only model and ending with two-way interactions.  
@@ -173,34 +173,30 @@ Bayesian inference methods were used to sample from the joint posterior distribu
 
 All models were fit with Stan probabilistic programming language, utilising No-U-Turn Hamiltonian Monte Carlo sampler. {\bf brms}-package was used for model fitting. All model priors were defined as generic weakly informative. We used Leave-One-Out (LOO) cross-validation method for model comparisons and selection by predictive accuracy.
 
-\todo[author=VPI]{TODO: CHECK BAYESIAN METHODS}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%    RESULTS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 % Multiplicity correction
 % nhst#         tests   pvals    padj
-% 1           sEBRxLC 0.21480 1.00000
-% 2         sEBRxFlow 0.70000 1.00000
-% 3    FlowXresiduals 0.00300 0.04500
-% 4  sEBRxLCxFlow+1SD 0.00001 0.00018
-% 5 sEBRxLCxFlow_mean 0.00001 0.00018
-% 6  sEBRxLCxFlow-1SD 0.15000 1.00000
-% 7  sEBRxLCxFlow LMM 0.00074 
-% 8 sEBRxPI2xSkDm+1SD 0.00001
-% 9  sEBRxPI2xSkDm_mn 0.33000
-% 10 sEBRxPI2xSkD-1SD 0.12000
-
-\todo{Recalculate adjusted p-values}
+% 1           sEBRxLC 0.21480	0.6444
+% 2         sEBRxFlow 0.70000	0.7
+% 3    FlowXresiduals 0.00300	0.018
+% 4  sEBRxLCxFlow+1SD 0.00001	0.0001
+% 5 sEBRxLCxFlow_mean 0.00001	0.0001
+% 6  sEBRxLCxFlow-1SD 0.15000	0.6
+% 7  sEBRxLCxFlow LMM 0.00074 	0.00518
+% 8 sEBRxPI2xSkDm+1SD 0.12000	0.6
+% 9  sEBRxPI2xSkDm_mn 0.33000	0.66
+% 10 sEBRxPI2xSkD-1SD 0.00001	0.0001
 
 \paragraph{RQ1: Is sEBR related to performance or Flow?}
 
-sEBR showed a negative relationship to participant-wise LC slopes, as shown in Fig.~\ref{fig:EBRvLC}, panel A. The correlation is of moderate strength, though non-significant (Pearson's {\it r} = -.46 , {\it p} = 1.0, N = 9). %NHST1
+sEBR showed a negative relationship to participant-wise LC slopes, as shown in Fig.~\ref{fig:EBRvLC}, panel A. The correlation is of moderate strength, though non-significant (Pearson's {\it r} = -.46 , {\it p} = 0.6, N = 9). %NHST1
 The LC slope of every participant was negative, which means we can say that the smaller the sEBR, the shallower the LC slope.% Or, because slope and intercept are highly correlated, it is almost equivalent to say that smaller sEBR correlates with better initial performance.
 
 
-Mean Flow scores are not directly related to sEBR (Pearson's {\it r} = 0.15, {\it p} = 1.0, N = 9). %NHST2
+Mean Flow scores are not directly related to sEBR (Pearson's {\it r} = 0.15, {\it p} = 0.7, N = 9). %NHST2
 %%%% FLOW X SEBR COR TEST
 % data:  FM and sEBR
 % t = 0.41014, df = 7, p-value = 0.694
@@ -210,7 +206,7 @@ Mean Flow scores are not directly related to sEBR (Pearson's {\it r} = 0.15, {\i
 % sample estimates:
 %      cor
 % 0.153187
-However, examining Fig.~\ref{fig:EBRvLC} shows an interesting relationship: the residuals of the fitted linear model (i.e. vertical distance of each data-point from the line) are {\it strongly} related to mean Flow scores (Pearson's {\it r} = -.86 , {\it p} = .04, N = 9). %NHST3
+However, examining Fig.~\ref{fig:EBRvLC} shows an interesting relationship: the residuals of the fitted linear model (i.e. vertical distance of each data-point from the line) are {\it strongly} related to mean Flow scores (Pearson's {\it r} = -.86 , {\it p} = .02, N = 9). %NHST3
 %%%% FLOW X RESIDUAL COR TEST
 % data:  FM and abs(LC - LM$fitted.values)
 % t = -4.4556, df = 7, p-value = 0.002952
@@ -237,32 +233,39 @@ In the \textbf{Bayesian} approach, according to the LOO model comparisons, the L
 \begin{figure*}[!t]
 	\centering
 	\includegraphics[width=\textwidth]{sEBR_RQ1-2_results}
-	\caption{\textbf{Panel A}: Participants' median spontaneous eye blink rate plotted against the slope of their learning curve, and coloured by their mean Flow scores. Linear model is depicted by the dashed line. Each point is labelled with the participant number (1..9) and exact mean Flow score (in parentheses). \textbf{Panel B}: ... \textbf{Panel C}: ... \textbf{Panel D:} ...}
+	\caption{Results. \textbf{Panel A}: Participants' median spontaneous eye blink rate plotted against the slope of their learning curve (LC), and coloured by their mean Flow scores. Linear model is depicted by the dashed line. Each point is labelled with the participant number (1..9) and exact mean Flow score (in parentheses). \textbf{Panel B}: Interaction plot for session-wise skill-demand$\times$PI.2 LMM, lines are linear models fitted at fixed levels of skill-demand. \textbf{Panel C}: Marginal effects of Bayesian model for participant-wise Flow$\times$LC. \textbf{Panel D:} Marginal effects of Bayesian model for session-wise skill-demand$\times$PI.2.}
 	\label{fig:EBRvLC}
 \end{figure*}
 
 
 \begin{table}[!hb]
 \centering
-\caption{Outcome of simple-slopes analysis for participant-wise Flow$\times$LC interaction: each row reports on the slope of LC slope at the level and value of Flow shown.}
+\caption{Outcome of simple-slopes analysis; \textbf{above}: for participant-wise Flow$\times$LC interaction; \textbf{below} for session-wise skill-demand$\times$PI.2 interaction.}
 \begin{tabular}{llllll}
 \hline
-Flow level & Flow & Est. & S.E. & t value & p \\
+Level  & Flow & Est.     & S.E.   & \textit{t} & \textit{p} \\
 \hline
-+ 1 SD & 5.40 & -1096.31 & 221.36 & -4.95 & 0.0002 \\
-Mean   & 5.06 &  -683.33 & 143.15 & -4.77 & 0.0002 \\
-- 1 SD & 4.73 &  -270.35 & 158.23 & -1.71 & 1.0 \\
++ 1 SD & 5.40 & -1096.31 & 221.36 & -4.95 & 0.0001 \\
+Mean   & 5.06 &  -683.33 & 143.15 & -4.77 & 0.0001 \\
+- 1 SD & 4.73 &  -270.35 & 158.23 & -1.71 & 0.6 \\
+\hline
+       & Skill- &      &      &            & \\
+Level  & demand & Est. & S.E. & \textit{t} & \textit{p} \\
+\hline
++ 1 SD & 0.96 &    -3.02 &   1.91 & -1.58 & 0.6 \\
+Mean   &-0.04 &     1.22 &   1.24 &  0.99 & 0.66 \\
+- 1 SD &-1.04 &     5.46 &   1.43 &  3.81 & 0.0001 \\
 \hline
 \label{tab:simpslopes}
 \end{tabular}
 \end{table}
 
 \paragraph{RQ2: session-wise sEBR and self-report}
-LOO testing of Bayesian models showed best out-of-sample predictive accuracy for interaction model with parameters skill-demand and PI-2 (``\textit{I must not make any mistakes here}''). 
+LOO testing of Bayesian models showed best out-of-sample predictive accuracy for interaction model with parameters skill-demand and PI.2 (``\textit{I must not make any mistakes here}''). 
 Visual diagnostics (created as above) indicated acceptable fit for the posterior predictive distribution. Model diagnostics (Eff.Sample = 4369 and Rhat = 1.0) indicate acceptable level of convergence. For this model, the 95\% HDI of the posterior sample distribution is -6.41..-1.83, so the interaction effect is non-zero. Fig~\ref{fig:EBRvLC}, panel D, shows the modelled interaction (made by \verb|brms::marginal_effects|).
 
-The skill-demand$\times$PI-2 LMM predicting sEBR showed the interaction was significant (df = 37, t = -3.680, p < 0.001). %NHST7
-Fig.~\ref{fig:EBRvLC} panel D shows the interaction at fixed levels of skill-demand (created by \verb|jtools::interact_plot|). SSI analysis shows that when (self-rated) demand exceeds skill the PI-2 slope significantly predicts sEBR at {\it p} $<$ 0.0001. %NHST10
+The skill-demand$\times$PI.2 LMM predicting sEBR showed the interaction was significant (df = 37, t = -3.680, p < 0.01). %NHST7
+Fig.~\ref{fig:EBRvLC} panel D shows the interaction at fixed levels of skill-demand (created by \verb|jtools::interact_plot|). SSI analysis shows that when (self-rated) demand exceeds skill the PI.2 slope significantly predicts sEBR at {\it p} $<$ 0.0001. %NHST10
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
