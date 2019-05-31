@@ -81,7 +81,9 @@ spontaneous blink rate; Bayesian analysis; Flow; skill learning; visuomotor task
 
 Spontaneous eye blink rate (sEBR) is a putative index of striatal dopamine \cite{Slagter2012}, and thus may serve as a correlate of motivation and cognitive control. Since these are very broad cognitive domains, it is interesting to examine more constrained states where the 3-way relationship between task, cognition, and neural correlates is more amenable to experimental investigation. For example, Flow is a multi-component state of `optimal experience' \cite{Csikszentmihalyi1975}, the conditions and outcomes of which reflect distinct states of motivation and cognitive control.
 
-This paper reports an experimental skill-acquisition study on the connections between performance, psychophysiology and the self-reported phenomenology of Flow, in a novel visuomotor task. A longitudinal design enables examination of how Flow and performance relate to sEBR within- and between-subjects.
+One issue with experiments in such domains is that the self-report data required to measure cognitive states is very sparse, by contrast to time-series of physiology or behaviour. Bayesian probabilistic modelling provides a way to examine interaction of performance, physiology, and self-report across complete distributions rather than point estimates, which thus improves capability to infer from sparsely sampled variables.
+
+This paper reports an experimental skill-acquisition study on the connections between performance, physiology, and self-reported Flow, in a novel visuomotor task. Our longitudinal design lets us study how Flow and performance relate to sEBR within- and between-subjects, and we use Bayesian models to examine the interactions in detail. Our Research Questions (RQs) are:
 
 % spontaneous eye blink rate (sEBR) was of interest in our reinforcement-based learning task (positive reinforcement from increase in speed, negative reinforcement from collisions
 
@@ -96,15 +98,10 @@ This paper reports an experimental skill-acquisition study on the connections be
 %
 % ... call for studies of Flow as elicited in different phases of learning, with a more controlled and quantitative approach; i.e. using approaches from experimental psychology \cite{Harris2017,Keller2008}, and psychophysiology \cite{Peifer2012,Peifer2014,Wolf2015,Harmat2015,Labonte-LeMoyne2016}.
 
-
-This design allowed us to explore the following Research Questions (RQs):
-
 \begin{enumerate}
-	\item RQ1. Does the baseline sEBR of each participant relate to their performance or Flow experience?
+	\item RQ1. Does the median baseline sEBR of each participant relate to their performance and Flow experience?
 
-	\item RQ2. Does sEBR variation across sessions (of each participant) affect their perceived cognitive performance, i.e. Flow, PI, skill:demand?
-
-	% \item RQ3. performance, blink rate, and Flow components???
+	\item RQ2. Does sEBR variation across sessions (of each participant) affect their perceived cognitive performance, i.e. Flow, perceived importance, skill:demand?
 
 \end{enumerate}
 
@@ -118,7 +115,7 @@ Unrelated RQs regarding behavioural data have been published elsewhere \cite{Cow
 \paragraph{Overview:}
 Participants learned to play a custom-made high-speed steering game (for game video see \url{https://doi.org/10.6084/m9.figshare.7269395.v1}). The aim of the game was to steer a blue cube through a course with randomly placed red obstacles at the highest possible speed, so performance was measured by duration of the trial. Collision with obstacles reduced speed by a fixed amount. The cube started each game at a fixed forward velocity, which increased at a constant rate. The lateral position of the cube was controlled by steering wheel. The game was specifically designed to elicit Flow by constantly balancing task demand with participant skill, and providing clear immediate feedback.
 
-Participants played the game for forty trials across eight sessions, over a period of 2-3 weeks, which was sufficient to achieve good proficiency in this task with no ceiling effect. The 10 item Flow Short Scale \cite{Engeser2008} was filled after each trial to probe self-reported Flow in the task. Physiological data were recorded, during task and five minutes of baseline, in sessions one and five-to-eight.
+Participants played the game for forty trials across eight sessions, over a period of 2-3 weeks, giving total play time = $~$2h which was sufficient to achieve good proficiency in this task with no ceiling effect. The 10 item Flow Short Scale \cite{Engeser2008} was filled after each trial. Physiological data were recorded, during task and five minutes of baseline, in sessions one and five-to-eight.
 
 
 \paragraph{Participants}
@@ -127,40 +124,38 @@ A convenience sample (N=9, 6 males, 3 females) was recruited, between 22-38 year
 \subsection*{Materials}
 \paragraph{Task \& Equipment} Participants played the custom high-speed steering game {\it CogCarSim} (game code permanently available under open source licence at \url{https://doi.org/10.6084/m9.figshare.7269467}). Separate computers were used to run the game and record the physiology data.
 
-Participants were seated aligned with the mid point of the 55" display screen (LG 55UF85). The screen resolution was 1920 x 1080 pixels, the frame rate was 60 and the refresh rate 60 Hz. The eye-to-screen distance was 90--120 cm.
+Participants were seated aligned with the mid point of a 55" display screen (LG 55UF85), resolution 1920$\times$1080 pixels, refresh rate 60Hz. Eye-to-screen distance was 90--120 cm.
 
-Sessions 1,5,6,7,8 had physiological measurements. Participants were dressed in physiological sensors and an eye-tracking headset, seated in the driving seat in quiet, low-light conditions for baseline measurement, where they sat still for five minutes looking at a dark blue screen.
+For physiological measurement sessions (1,5,6,7,8), participants were dressed in sensors, seated in the driving seat in quiet, low-light conditions for baseline measurement, where they sat still for five minutes looking at a dark blue screen.
 
-We used Pupil Labs Binocular 120 Hz eye tracker (Pupil Labs UG haftungsbeschränkt, Berlin, Germany), stabilised with a custom-built headband, with data acquisition via Pupil Capture software. Gaze direction was calibrated using ten markers on the display, three times per session.
+We used Pupil Labs Binocular 120 Hz eye tracker (Pupil Labs UG haftungsbeschr\"{a}nkt, Berlin, Germany), stabilised with a custom-built headband, with data acquisition via Pupil Capture software. Gaze direction was calibrated using ten markers on the display, three times per session.
 
 Electrodermal activity (EDA, not reported here),  was recorded from the left foot (to minimise motor artefacts). Blood volume pulse (BVP) was measured using a pulse oximeter sensor attached to the left index toe.
 
-\paragraph{Flow Short Scale} To measure self-reported Flow, participants filled the Flow Short Scale (FSS) after each trial \cite{Rheinberg2003,Engeser2008}. FSS has 10 core items which load the subfactors {\it fluency of performance} (6 items) and {\it absorption by activity} (4 items); plus 3 items for {\it perceived importance}. The response format of FSS is a 7-point Likert scale ranging from {\it Not at all} to {\it Very much}. Higher scores on the scales indicate higher experienced Flow and perceived importance. The Flow score used herein was formed by averaging items in the {\it fluency of performance} and {\it absorption by activity} subfactors; {\it perceived importance} was used separately in analyses. 
+\paragraph{Flow Short Scale} To measure self-reported Flow, participants filled the Flow Short Scale (FSS) after each trial \cite{Cowley2019flow}. The response format of FSS is a 7-point Likert scale ranging from lower to higher values of the item (e.g. higher scores indicate higher experienced Flow/PI). FSS has 10 core items which load subfactors {\it fluency of performance} (6 items) and {\it absorption by activity} (4 items); these subfactors were averaged to obtain Flow scores. There were also 3 items (here analysed separately) for {\it perceived importance} (PI) -- 1. \textit{Something important to me is at stake here}; 2. \textit{I must not make any mistakes here}; 3. \textit{I am worried about failing}.
 
 % (+3 additional items)
-In addition to the 13 items asked after every trial, participants were asked after each session to report 3 items measuring task skill and demand \cite{Rheinberg2003}.
+In addition to these 13 items asked after every trial, after each session participants were asked 3 items measuring skill and demand. The demand item (\textit{Compared to all other activities which I partake in, this one is...(easy - difficult)}) was subtracted from the skill item (\textit{I think that my competence in this area is...(low - high)}) to code a skill:demand variable.
+% These items, plus the 3 PI items, were used separately in analyses.
 
-% \subsection*{Procedure}
-% In their first session, participants were informed about the procedure of the study and asked to fill in a background information questionnaire, including information on health, driving experience and gaming experience, and an informed consent form.
-%
-% The sessions were managed by two research assistants at a time, who observed the measurement out of participants' line of sight. Before each session participants filled in a session-wise questionnaire on the use of contact lenses, restedness, and medication, caffeine, and nicotine intake.
-%
-% In sessions 2 to 4, participants played five trials straight after filling in the session-wise questionnaire. The FSS was filled after each trial. In sessions with physiological measurements (1 and 5 to 8), participants were dressed in physiological sensors and an eye-tracking headset, seated in the driving seat in quiet, low-light conditions for baseline measurement. They were asked to sit still for five minutes, looking at a dark blue screen, while baseline was recorded. After baseline recording, participants played five game trials, filling FSS after each trial.
 
 \subsection*{Analysis}
+Data for RQ1 were aggregated at participant level. Learning curve (LC) was derived by fitting power-law models to the trial-duration scores distributed over runs, then log-transforming to obtain linear models. Analyses reported here use LC slopes.
+
+RQ2 is addressed by session-wise data, with parameters gathered either directly at the session level (sEBR, skill:demand self-reports), or aggregated from run-level data (Flow and PI self-reports).
+%FIXME: REPORT WHICH VARS WERE CENTERED OR SCALED?
+%FIXME: EXPLAIN WHAT FINAL VARIABLES WERE USED!
 
 \paragraph{Signal preprocessing}
-Eye blinks were counted manually from the middle three minutes of each baseline eye-tracking video (from sessions 1 \& 5--8). Four measurements (out of 40) were excluded due to measurement problems.
+Eye blinks were counted manually from the middle three minutes of each baseline eye-tracking video (from sessions 1 \& 5--8). Four of 40 baselines were excluded due to measurement problems.
 
-All fast and simultaneous movements of both eyelids were counted as blinks (even if the eyelid did not fully close). To ensure reliable blink identification, two of the authors independently counted the number of blinks in sessions 1, 6 and 8, and inter-rater reliability of the counts was calculated as 98.7\% (see below). This was enough to allows blinks in sessions 5 and 7 to be counted by only one experimenter.
+All fast and simultaneous movements of both eyelids were counted as blinks (even if the eyelid did not fully close). To ensure rater reliability, two authors independently counted the number of blinks in sessions 1, 6 and 8. Inter-rater reliability of their counts was calculated as 98.7\% (see below); thus, blinks in sessions 5 and 7 were counted by only one experimenter.
 
-We calculated the level of consensus between the two raters as follows. Separately for each participant and session, we divide the difference of two raters' blink counts by the mean of those counts, and then subtract the quotient from 1 to obtain a percentage, which were then averaged to give total inter-rater reliability. The session-wise reliability scores also had low variability (mean of standard deviations = 0.01). The final sEBR was calculated as median blinks per minute during the three minutes counted.
+We calculated the level of consensus between the two raters as follows. Separately for each participant and session, we divided the difference of two raters' blink counts by the mean of those counts, and then subtracted the quotient from 1 to obtain a percentage. These were averaged to give total inter-rater reliability. The session-wise reliability scores also had low variability (mean of standard deviations = 0.01). The final sEBR was calculated as median blinks per minute during the three minutes counted.
 
 \paragraph{Statistical methods:}
-All statistical data processing reported herein was implemented with {\sf R} platform for statistical computing \cite{R2014}. {\sf R} code and data used to produce all analyses and figures is permanently available online at % FIXME - NEW FIGSHARE FOR BLINK PAPER
-
-Where possible, exact corrected {\it p}-values are reported; inequalities are reported where exact values were not available.
-All {\it p}-values were corrected for multiple comparisons using Bonferroni-Holm.
+All analysis was implemented with {\bf R} platform for statistical computing. {\it p}-values were corrected for multiple comparisons using Bonferroni-Holm. {\bf R} code and data used to produce all analyses and figures is permanently available online at 
+\todo{FIXME - NEW .Rmd FOR BLINK PAPER}
 % For all simple correlations we calculated Pearson's correlation coefficient, because all data in these tests were shown to be normally distributed by Shapiro-wilk tests and associated Q-Q plots.
 % tests   pvals    padj
 % 1           sEBRxLC 0.21480 1.00000
@@ -170,34 +165,37 @@ All {\it p}-values were corrected for multiple comparisons using Bonferroni-Holm
 % 5 sEBRxLCxFlow_mean 0.00001 0.00018
 % 6  sEBRxLCxFlow-1SD 0.15000 1.00000
 
+Each RQ was addressed both by linear regression for comparison, and by Bayesian modelling to explore the space of models, select the best fit, and examine the interactions. 
 
-\paragraph{Interaction analysis:}
-To conduct all {\it simple slopes} interaction analyses we used the {\sf jtools} package for {\sf R} \cite{jtools}. The {\bf RQ1} simple slopes analysis was conducted on a linear regression model (using {\it lm} function in {\sf R}) with sEBR as dependent variable; predictors were main effects of, and interaction of, Flow and LC. The slope of LC was estimated when Flow was held constant at its mean$\pm$1SD, producing the estimates shown in Table~\ref{tab:simpslopes} (see Results).
+\paragraph{Linear analyses:}
+For {\bf RQ1} we modelled main effects and interaction of Flow and LC as predictors of sEBR by linear regression. We then conducted simple slopes interaction (SSI) analysis (with {\bf R}'s {\bf jtools} package), estimating slope of LC when Flow was held constant at its mean$\pm$1SD. 
+
+For \textbf{RQ2} we used (restricted maxmimum likelihood) Linear Mixed Models (LMMs) with random effect of participant (using {\bf lmer} package for {\bf R}). SSI analysis estimated the slope of PI-2 when skill:demand was held constant at its mean$\pm$1SD.
 
 \paragraph{Bayesian analysis:}
-Bayesian inference methods were used to sample from the joint posterior distribution of model parameters for performance, sEBR, and self-report data (as eq.1).
+Bayesian inference methods were used to sample from the joint posterior distribution of model parameters for performance, sEBR, and self-report data, as per $p(\theta|D) \propto p(D|\theta)p(\theta)$. We thus constructed models for each combination of relevant parameters, starting with the intercept-only model and ending with two-way interactions.  
 
-\begin{equation}
-    p(\theta|D) \propto p(D|\theta)p(\theta)
-\end{equation}
+% \begin{equation}
+%     p(\theta|D) \propto p(D|\theta)p(\theta)
+% \end{equation}
 
-All models were fit with Stan probabilistic programming language, utilising No-U-Turn Hamiltonian Monte Carlo sampler. {\bf brms}-package was used for model fitting. All model priors were defined as generic weakly informative. We used Leave-One-Out Cross-Validation method for model comparisons and selection by predictive accuracy.
+All models were fit with Stan probabilistic programming language, utilising No-U-Turn Hamiltonian Monte Carlo sampler. {\bf brms}-package was used for model fitting. All model priors were defined as generic weakly informative. We used Leave-One-Out (LOO) cross-validation method for model comparisons and selection by predictive accuracy.
 
-\todo[inline]{ADD BAYESIAN METHODS}
+\todo[author=VPI]{TODO: CHECK BAYESIAN METHODS}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%    RESULTS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
-\paragraph{RQ1: Is spontaneous eye blink rate related to performance or Flow?}
+\paragraph{RQ1: Is sEBR related to performance or Flow?}
 
 sEBR showed a negative relationship to participant-wise LC slopes, as shown in Fig.~\ref{fig:EBRvLC}, panel A. The correlation is of moderate strength, though non-significant (Pearson's {\it r} = -.46 , {\it p} = 1.0, N = 9). %NHST13
-The LC slope of every participant was negative, which means we can say that the smaller the sEBR, the shallower the LC slope. Or, because slope and intercept are highly correlated, it is almost equivalent to say that smaller sEBR correlates with better initial performance.
+The LC slope of every participant was negative, which means we can say that the smaller the sEBR, the shallower the LC slope.% Or, because slope and intercept are highly correlated, it is almost equivalent to say that smaller sEBR correlates with better initial performance.
 
-Mean Flow scores are not related to sEBR, as can be seen in Fig.~\ref{fig:EBRvLC} (Pearson's {\it r} = 0.15, {\it p} = 1.0, N = 9). %NHST14
-However, examining the Flow scores in Fig.~\ref{fig:EBRvLC} turns up an interesting relationship: the residuals of the fitted linear model (i.e. vertical distance of each data-point from the line) are {\it strongly} related to mean Flow scores (Pearson's {\it r} = -.86 , {\it p} = .04, N = 9). %NHST15
-In other words, participants' mean Flow scores are strongly correlated with their observed deviation from the modelled linear relationship between sEBR and task learning (LC slope). This correlation is not driven only by the non-significant correlation of Flow and LC (described above). In fact, interaction analysis (see Table~\ref{tab:simpslopes}) shows that when Flow mean is above 5.05, LC slope significantly predicts sEBR at {\it p} $<$ 0.0001.
+Mean Flow scores are not related to sEBR (Pearson's {\it r} = 0.15, {\it p} = 1.0, N = 9). %NHST14
+However, examining the Flow scores in Fig.~\ref{fig:EBRvLC} turns up an interesting relationship: the residuals of the fitted linear model (i.e. vertical distance of each data-point from the line) are {\it strongly} related to mean Flow scores (Pearson's {\it r} = -.86 , {\it p} = .04, N = 9), as shown in Fig~\ref{fig:EBRvLC} panel B. %NHST15
+In other words, participants' mean Flow scores are strongly correlated with their observed deviation from the linear relationship between sEBR and task learning (LC slope). This correlation is not driven only by the non-significant correlation of Flow and LC (above). In fact, interaction analysis (see Table~\ref{tab:simpslopes}) shows that when Flow mean is above 5.05, LC slope significantly predicts sEBR at {\it p} $<$ 0.0001.
 %%%% FLOW X SEBR COR TEST
 % data:  FM and sEBR
 % t = 0.41014, df = 7, p-value = 0.694
@@ -216,6 +214,9 @@ In other words, participants' mean Flow scores are strongly correlated with thei
 %  -0.9700331 -0.4562393
 % sample estimates:
 %       cor
+
+In the \textbf{Bayesian} approach, according to the LOO model comparisons, the LC$\times$Flow interaction model had the best out-of-sample predictive accuracy. Visual diagnostics (created using \verb|brms::pp_check| function; not shown due to space constraints) indicated acceptable fit for the posterior predictive distribution. Model diagnostics (Eff.Sample = 1825 and Rhat = 1.0) indicate acceptable level of convergence. For this model, the 95\% Highest-Density Interval (HDI) of the posterior sample distribution is -0.86..-0.15, so the interaction effect is non-zero. Fig~\ref{fig:EBRvLC}, panel C, shows the modelled interaction (created using \verb|brms::marginal_effects|).
+
 \begin{figure*}[!t]
 	\centering
 	\includegraphics[width=\textwidth]{sEBR_RQ1-2_results}
@@ -224,11 +225,9 @@ In other words, participants' mean Flow scores are strongly correlated with thei
 \end{figure*}
 
 
-% -0.859833
-
 \begin{table}[!hb]
 \centering
-\caption{Outcome of simple-slopes analysis for Flow$\times$LC interaction: each row reports on the slope of LC slope at the level and value of Flow shown.}
+\caption{Outcome of simple-slopes analysis for participant-wise Flow$\times$LC interaction: each row reports on the slope of LC slope at the level and value of Flow shown.}
 \begin{tabular}{llllll}
 \hline
 Flow level & Flow & Est. & S.E. & t value & p \\
@@ -254,29 +253,23 @@ Mean   & 5.06 &  -683.33 & 143.15 & -4.77 & 0.0002 \\
 %
 %  JOHNSON-NEYMAN INTERVAL
 
-\subsection*{RQ2: blink rate and Flow components}
-{\it session-wise within-subjects}
+\paragraph{RQ2: blink rate and Flow components}
+LOO testing of Bayesian models showed best out-of-sample predictive accuracy for interaction model with parameters skill:demand and PI-2 (``\textit{I must not make any mistakes here}''). 
+Visual diagnostics (created as above) indicated acceptable fit for the posterior predictive distribution. Model diagnostics (Eff.Sample = 4369 and Rhat = 1.0) indicate acceptable level of convergence. For this model, the 95\% HDI of the posterior sample distribution is -6.41..-1.83, so the interaction effect is non-zero. Fig~\ref{fig:EBRvLC}, panel D, shows the modelled interaction (made by \verb|brms::marginal_effects|).
 
-
+The LMM for skill:demand$\times$PI-2
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%     DISCUSSION    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
 % exploration of Flow and on-task learning (LC as opposed to pre- post)
-We present a longitudinal experiment of Flow in a game-like high-speed steering task where task performance is easily parametrised and its relation to Flow and sEBR analysed. % game was fairly successful in eliciting Flow-like experiences (high baseline, score five out of seven)
-To induce Flow, the game was designed to hold the balance between skill and challenge constant: the difficulty of the game continually adapted to the skill level of the participant.
+Based on a longitudinal experiment of Flow in a game-like high-speed steering task, we report evidence that LC slope is predicted by the participants' spontaneous blink rate, moderated by global Flow. This relationship potentially indicates a role for striatal dopamine in learning the visuomotor steering task, which may interact with experiential aspects. We further examined interactions between learning, sEBR, and perceived skill:demand balance and importance....%FIXME: REPORT RQ2
 
-...
-
-% Without aiming to propose a new model here, we can, based on our behavioural data, consider Flow and learning
-{\it A possibly useful novel way to view Flow and learning is via task complexity. Flow has been proposed to be possible in {\it any} task, complex (e.g. car driving) or simple (e.g. dish washing) \cite{Csikszentmihalyi1999}, but has also been proposed to depend on perceived task value as well as challenge--skill balance \cite{Keller2012}. One way to resolve these ideas is to consider that the individual can {\it introduce} complexity (or value) to their activity if they appear to have exhausted a task's potential to challenge them. \cite{Nakamura2002} suggest such an exploratory mechanism to explain how individuals maintain Flow in complex tasks: ``As people master challenges in an activity...to continue experiencing flow, they must identify and engage progressively more complex challenges.'' The corollary for simple tasks is that individuals {\it create} complexity, e.g. with self-defined goals \cite{Rauterberg1995}. For example, a similar state to Flow, called the Zone, has been reported for machine-gambling addicts whose pastime is in fact skill-free, but who nevertheless believe that they are skilled \cite{Schull2014}.}
-
-{\it In other words, complex tasks have deep structure to be learned, requiring non-trivial skill acquisition for any duration of learning and thus a shallow LC (learning is slow). Importantly, the skill level does not quickly peak, such as with simpler tasks like washing the dishes, where Flow might be obtained but cannot strongly interact with learning (without self-created complexity). Learning comes into play when we consider that the same task can appear at first simple and later complex, e.g. as our experiment game.}
 
 % Relation to previous Work on eye blink rate
-\subsection*{Learning, Flow, and sEBR}
-Between-subjects evidence for RQ1 suggests a clear linear trend relating sEBR and LCs (Fig.~\ref{fig:EBRvLC}): the larger the sEBR, the steeper the LC slope (or: the higher the LC intercept). The distance of data-points from the fitted model values also closely match the distribution of Flow mean scores, meaning that individuals with lowest Flow also diverge the most from the sEBR$\times$LC model. Interaction analysis then supports the idea that sEBR correlation with LC is stronger the higher the mean Flow. We thus claim that there is a genuine sEBR--LC relationship that is moderated by Flow. We cannot decide causality based on our data, but there is literature relevant to mechanisms, that can help identify future directions of inquiry.
+\paragraph{RQ1 - Learning, Flow, and sEBR:}
+Evidence for RQ1 suggests a clear linear trend relating sEBR and LCs (Fig.~\ref{fig:EBRvLC}): the larger the sEBR, the steeper the LC slope (or: the higher the LC intercept). The distance of data-points from the fitted model values also closely match the distribution of Flow mean scores, meaning that individuals with lowest Flow also diverge the most from the sEBR$\times$LC model. Interaction analysis then supports the idea that sEBR correlation with LC is stronger the higher the mean Flow. We thus claim that there is a genuine sEBR--LC relationship that is moderated by Flow. We cannot decide causality based on our data, but there is literature relevant to mechanisms, that can help identify future directions of inquiry.
 
 Learning is influenced both by psychological factors (motivation, prior experience) and physio-/neurological factors. One potentially relevant factor for studying Flow and skill acquisition is the well-established relationship between attention and striatal dopamine levels \cite{Dreisbach2005}. The striatum plays a major role in decision making and reward/aversion processing, moderated by the level of tonic dopamine D2-receptors therein; the postsynaptic levels of dopamine can thus bias the entire learning process. This is illustrated for example in studies of `attentional blink' (AB) by Slagter and others \cite{Slagter2012,COLZATO2008}), which suggest a U-shaped function between tonic striatal dopamine and AB size. In other words, very high or low levels of dopamine D2-receptor density can make attention updating too rapid (distractable) or too slow (inattentive).
 
@@ -289,20 +282,9 @@ The underlying mechanism could be that higher dopamine levels permit more rapid 
 Less subjective Flow was reported by those participants who deviated (positively or negatively) from this relationship. Lower Flow could be due to, e.g., misalignment of task demands and attentional updating rate, creating a more effortful experience. So the observed moderation by Flow scores of the sEBR--LC relationship could be speculated to have a basis in adjusting attention updating, in response to changing task speeds, physiologically underpinned by the nigro-striatal DA system. In other words, it may not be the case that an absolute level of striatal dopamine should predict learning, but rather an individual level relative to how each participant relates to the task (vis-\'{a}-vis gaming experience, motivation, fine motor skills, or potentially many other variables). If a participant's tonic dopamine is not at their ideal level for this task, they might nevertheless do well in the task, and yet find the experience more effortful and less fluid (than is suggested as Flow-like by wording of the FSS).
 
 
-\subsection{Limitations and Future Work}
-{\it Our study had a small convenience sample because (a) the recording paradigm was extensive (around eight hours of contact time), and (b) it was to some degree an exploratory study; both implying the need to constrain datasets to tractable sizes. It is worth noting that while we recruited only 9 participants, we collected a significant amount of behavioural and physiological data for each participant over a course of two weeks and 8 recording sessions. This amounts to a particularly rich dataset allowing us to dig deep into the underpinnings of skilled high speed steering and Flow. Moreover, given the fact our experimental paradigm has not been used previously, we could not {\it a priori} easily estimate the statistical power required to discover significant effects. However, our results ended up being both strikingly {\it similar} and {\it strong} within each participant, suggesting that collecting a larger sample size would likely have {\it not} changed the pattern of the results or provided more in-depth insights. Regardless of the justifications, the sample size and method are minor limitations to be remedied in future work. Additionally, lacking experimental manipulations the study cannot make strong causal claims, which could be improved by recording separate conditions of the game task, e.g. with varied difficulty levels.}
+% \subsection{Limitations and Future Work}
+To further explore the possible role of striatal dopamine, it would be interesting to experimentally manipulate the game to adjust the distance between obstacles, thus altering the attention-updating rate required to navigate without collisions (motor precision variation can be minimised by a suitably long training period). This manipulation could be varied in response to measurements of sEBR (which can be automated, e.g. by using electro-oculography \cite{toivanen2014}), to systematically study if sEBR has explanatory power for individual variability in learning.
 
-{\it Trial-by-trial analysis is limited by the Flow self-report which only has one data point per trial. It would be more powerful to analyse {\it inside} each trial. In our data, self-reported Flow is a point model of an entire trial, for which the participant knows their score. Self-reported Flow is thus an after-the-fact report, and could be criticized for not capturing the in-the-moment {\it experience of Flow}, which might fluctuate greatly during a trial. Analysing the fluctuation of Flow-experience requires us to model individual actions and/or their outcomes, and sample Flow during performance. This is a difficult challenge, because paying attention to one's phenomenal state might easily disrupt the very processes sustaining that state, especially for Flow which is unreflective by definition. Future work should aim to model the conditions of Flow ({\sf C1--3}) in real-time, while simultaneously recording participant physiology, to uncover in greater detail the relationships involved. The existing dataset will be used for this purpose, in a pending report on the biosignals recorded with high temporal resolution, primarily electro-dermal activity.}
-
-To further explore the possible role of striatal dopamine, it would be interesting to experimentally manipulate the game to adjust the distance between obstacles, thus altering the attention-updating rate required to navigate without collisions (motor precision variation can be minimised by a suitably long training period). This manipulation could be varied in response to measurements of sEBR (which can be automated, e.g. by using electro-oculography \cite{toivanen2014}), to systematically investigate whether sEBR holds explanatory power with respect to individual variability in learning.
-
-
-\subsection{Conclusion}
-
-% We report evidence that the LC across sessions is predicted by participants' spontaneous blink rate.
-We report evidence that slope of the learning curve (total play time about 2 h, distributed over two weeks) is predicted by the participants' spontaneous blink rate, moderated by global Flow. This relationship potentially indicates a role for striatal dopamine in learning the visuomotor steering task, which may interact with the experience of Flow.
-
-% Understanding how perceptual-cognitive and motor processes underlying performance give rise to phenomenological experiences, such as Flow, and how the phenomenal experiences relate to performance on the other is an important topic for understanding human motivation and performance. This study contributes to this goal and we hope will inspire more inquiry into the dynamics of the Flow experience in different stages of learning a skill.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -311,7 +293,7 @@ We report evidence that slope of the learning curve (total play time about 2 h, 
 
 
 \section{Acknowledgements}
-We thank Tuisku Tammi, Jussi Palom\"{a}ki, Noora Lehtonen, Otto Lappi, Kalle Toika, and Juha Veps\"{a}l\"{a}inen.
+We thank Tuisku Tammi, Noora Lehtonen, Otto Lappi, Kalle Toika, and Juha Veps\"{a}l\"{a}inen.
 
 % \section*{Author contributions statement}
 % % please edit as appropriate
