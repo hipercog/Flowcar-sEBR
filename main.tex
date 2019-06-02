@@ -85,18 +85,9 @@ One issue with experiments in such domains is that the self-report data required
 
 This paper reports an experimental skill-acquisition study on the connections between performance, physiology, and self-reported Flow, in a novel visuomotor task. Our longitudinal design lets us study how Flow and performance relate to sEBR within- and between-subjects, and we use Bayesian models to examine the interactions in detail. Our Research Questions (RQs) are:
 
-% spontaneous eye blink rate (sEBR) was of interest in our reinforcement-based learning task (positive reinforcement from increase in speed, negative reinforcement from collisions
-
 % Conditions are: {\sf C1} challenges match skill in a demanding task; {\sf C2} clear meaningful goals; and {\sf C3} unambiguous feedback. If Flow arises, self-reported outcomes include: {\sf F1} total focus in the present moment; {\sf F2} merging of action and awareness; {\sf F3} a sense of effortlessness and automaticity; {\sf F4} sense of control; {\sf F5} positive affect; {\sf F6} distortion of temporal experience \cite{Nakamura2002,Engeser2012intro,Keller2012}. %Flow has an autotelic quality, i.e. people want to do Flow-producing activities for their own sake regardless of external reward.
 %
 % The antecedent conditions ({\sf C1-3}) and phenomenological features ({\sf F1-6}) of Flow have been investigated for several decades, mainly using analysis of self-report data from participants engaging in natural everyday or expert performance \cite{Csikszentmihalyi1971,Moneta2012}...
-%
-% Prior Flow research has tended to capture a static snapshot of Flow, so we must still deal with \textit{learning} that increases skill, and knock-on impact on skill-challenge balance.
-%
-% %anticipate MAIN RESULT and its IMPLICATIONS here
-% ... understanding the specific mechanisms that mediate Flow and learning could be significant for enhancing enjoyment or performance in many tasks.
-%
-% ... call for studies of Flow as elicited in different phases of learning, with a more controlled and quantitative approach; i.e. using approaches from experimental psychology \cite{Harris2017,Keller2008}, and psychophysiology \cite{Peifer2012,Peifer2014,Wolf2015,Harmat2015,Labonte-LeMoyne2016}.
 
 \begin{enumerate}
 	\item RQ1. Does the median baseline sEBR of each participant relate to their performance and Flow experience?
@@ -264,7 +255,7 @@ Mean   &-0.04 &     1.22 &   1.24 &  0.99 & 0.66 \\
 LOO testing of Bayesian models showed best out-of-sample predictive accuracy for interaction model with parameters skill-demand and PI.2 (``\textit{I must not make any mistakes here}''). 
 Visual diagnostics (created as above) indicated acceptable fit for the posterior predictive distribution. Model diagnostics (Eff.Sample = 4369 and Rhat = 1.0) indicate acceptable level of convergence. For this model, the 95\% HDI of the posterior sample distribution is -6.41..-1.83, so the interaction effect is non-zero. Fig~\ref{fig:EBRvLC}, panel D, shows the modelled interaction (made by \verb|brms::marginal_effects|).
 
-The skill-demand$\times$PI.2 LMM predicting sEBR showed the interaction was significant (df = 37, t = -3.680, p < 0.01). %NHST7
+The skill-demand$\times$PI.2 LMM predicting sEBR showed the interaction was significant (df = 37, t = -3.680, p $<$ 0.01). %NHST7
 Fig.~\ref{fig:EBRvLC} panel D shows the interaction at fixed levels of skill-demand (created by \verb|jtools::interact_plot|). SSI analysis shows that when (self-rated) demand exceeds skill the PI.2 slope significantly predicts sEBR at {\it p} $<$ 0.0001. %NHST10
 
 
@@ -272,9 +263,11 @@ Fig.~\ref{fig:EBRvLC} panel D shows the interaction at fixed levels of skill-dem
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%     DISCUSSION    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
+\todo[inline,author=BC]{EVERYTHING THAT FOLLOWS COMES FROM OUR FIRST ARTICLE AND MUST BE UPDATED...}
 % exploration of Flow and on-task learning (LC as opposed to pre- post)
-Based on a longitudinal experiment of Flow in a game-like high-speed steering task, we report evidence that LC slope is predicted by the participants' spontaneous blink rate, moderated by global Flow. This relationship potentially indicates a role for striatal dopamine in learning the visuomotor steering task, which may interact with experiential aspects. We further examined interactions between learning, sEBR, and perceived skill:demand balance and importance....%FIXME: REPORT RQ2
+Based on a longitudinal experiment of Flow in a game-like high-speed steering task, we report evidence that LC slope is predicted by the participants' spontaneous blink rate, moderated by mean Flow. This relationship potentially indicates a role for striatal dopamine in learning the visuomotor steering task, which may interact with experiential aspects. We further examined interactions between learning, sEBR, and perceived skill:demand balance and importance....%FIXME: REPORT RQ2
 
+% sEBR was of interest in our reinforcement-based learning task (positive reinforcement from increase in speed, negative reinforcement from collisions
 
 % Relation to previous Work on eye blink rate
 \paragraph{RQ1 - Learning, Flow, and sEBR:}
